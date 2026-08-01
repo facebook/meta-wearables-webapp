@@ -1,0 +1,18 @@
+{
+  "name": "step-counter",
+  "version": "1.0.0",
+  "description": "Step Counter app for Meta Display Glasses",
+  "private": true,
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "meta",
+    "wearables",
+    "step-counter",
+    "fitness",
+    "accelerometer"
+  ],
+  "author": "Meta Wearables Team",
+  "license": "MIT"
+}
