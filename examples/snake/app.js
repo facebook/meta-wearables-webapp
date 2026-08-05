@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 // Snake Game — MetaDisplay Glasses Webapp
 // Controls: Arrow keys / D-pad (EMG swipe gestures)
 
@@ -183,6 +191,7 @@
   function tick() {
     dir = { ...nextDir };
     const head = { x: snake[0].x + dir.x, y: snake[0].y + dir.y };
+    const willEatFood = food && head.x === food.x && head.y === food.y;
 
     // Wall collision
     if (head.x < 0 || head.x >= COLS || head.y < 0 || head.y >= ROWS) {
@@ -190,8 +199,9 @@
       return;
     }
 
-    // Self collision
-    for (let i = 0; i < snake.length; i++) {
+    // Self collision. When not eating, the tail moves away during this tick.
+    const collisionLength = willEatFood ? snake.length : snake.length - 1;
+    for (let i = 0; i < collisionLength; i++) {
       if (snake[i].x === head.x && snake[i].y === head.y) {
         gameOver();
         return;
@@ -201,7 +211,7 @@
     snake.unshift(head);
 
     // Eat food
-    if (food && head.x === food.x && head.y === food.y) {
+    if (willEatFood) {
       score += 10;
       scoreDisplay.textContent = 'Score: ' + score;
       spawnFood();
@@ -231,7 +241,9 @@
     }
 
     const best = getBestScore();
-    addScore(score);
+    if (score > 0) {
+      addScore(score);
+    }
 
     finalScore.textContent = score;
     if (score > best && score > 0) {

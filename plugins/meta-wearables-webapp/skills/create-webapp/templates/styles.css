@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 :root {
   --bg-primary: #000000; /* pure black = transparent on additive display, lets real world show through */
   --bg-secondary: #0a0a0f;

@@ -1,4 +1,9 @@
-#!/usr/bin/env python3
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
+
 """
 Pure Python QR Code Generator — No external dependencies.
 
@@ -259,7 +264,7 @@ def _select_version(data_len, ec_level):
     return None
 
 
-def _encode_data(data_bytes, version, ec_level):
+def _encode_data(data_bytes, version, ec_level):  # noqa: C901
     """Encode data into QR codewords (data + EC) with interleaving."""
     params = QR_PARAMS[(version, ec_level)]
     total_cw, ec_per_block, nb1, dcw1, nb2, dcw2 = params
@@ -556,7 +561,7 @@ class QrCode:
                 if not self._isfunction[y][x] and mask_fn(y, x):
                     self._modules[y][x] = not self._modules[y][x]
 
-    def _get_penalty_score(self):
+    def _get_penalty_score(self):  # noqa: C901
         """Calculate the penalty score for the current module configuration."""
         size = self._size
         score = 0

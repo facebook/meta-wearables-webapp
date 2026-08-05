@@ -1,5 +1,8 @@
-#!/usr/bin/env fbpython
-# (c) Meta Platforms, Inc. and affiliates. Confidential and proprietary.
+# Copyright (c) Meta Platforms, Inc. and affiliates.
+# All rights reserved.
+#
+# This source code is licensed under the BSD-style license found in the
+# LICENSE file in the root directory of this source tree.
 
 """
 Pure Python favicon (PNG) generator — no external dependencies.
@@ -369,7 +372,7 @@ def draw_glyph(canvas: Canvas, char: str, cx: float, cy: float, scale: int, colo
 # ---------------------------------------------------------------------------
 
 
-def render_spec(spec: dict) -> bytes:
+def render_spec(spec: dict) -> bytes:  # noqa: C901
     size = int(spec.get("size", 128))
     canvas = Canvas(size)
 

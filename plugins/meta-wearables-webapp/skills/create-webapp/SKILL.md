@@ -15,7 +15,21 @@ Before generating or modifying any code, read both:
 - `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
 - `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
 
+In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
+
+For current Web Apps docs, use the shared Wearables MCP endpoint `https://mcp.developer.meta.com/wearables` and call `search_webapps_docs`. The endpoint does not require auth, OAuth, tokens, or custom authorization headers.
+
+If these reference files are unavailable in an isolated eval, do not search `/`, home directories, or unrelated workspaces. Apply the requirements already present in this skill and continue.
+
+If the reference files are unavailable in an isolated eval, still apply these hard performance budgets:
+
+- Initial load under 3 seconds.
+- JavaScript bundle under 500 KB gzipped.
+- 60 fps for focus movement, transitions, and animations.
+- Runtime memory under 128 MB.
+- Fewer than 10 network requests during initial load.
 
 # Create Meta Display Glasses WebApp
 
@@ -78,6 +92,7 @@ Generate three files using these templates as the foundation:
 
 Key requirements for the HTML:
 - Viewport: `width=600, height=600`
+- Additive display physics: pure black (`#000000`) renders as transparent on the additive waveguide display. Use black only for the page background/transparent areas; visible UI surfaces such as cards, headers, rows, buttons, and panels must use dark gray tones (for example `#121417`, `#1C1E21`, or `#24262B`) with light text.
 - Description: `<meta name="description" content="...">` in the `<head>` with a brief, app-specific summary of what the app does. Replace the template placeholder with real copy.
 - MRBD identification: `<meta name="mrbd-web-app-capable" content="yes">` in the `<head>` to positively identify the page as a Meta Display Glasses (MRBD) compatible webapp. Keep `content="yes"` verbatim.
 - All interactive elements: `class="focusable"` and `tabindex="0"` if not a button
@@ -92,6 +107,11 @@ Customize these sections in `app.js` for each app:
 - `onScreenEnter()` — Screen-specific data loading/rendering
 
 Add app-specific styles to `styles.css` as needed, building on the template foundations.
+
+Framework guidance:
+- For new Meta Display Glasses webapps, recommend the vanilla HTML/CSS/JS scaffold from this skill as the default path.
+- Advise against heavy frameworks such as React, Angular, Vue, or large UI component libraries for first-pass apps because they make the 500 KB gzipped bundle, 3 second initial load, 128 MB runtime memory, and 60 fps interaction budgets harder to hit.
+- If a framework is truly required, prefer lightweight alternatives such as Preact, keep dependencies minimal, measure the gzipped production bundle early, and preserve the same D-pad focus model and display constraints.
 
 ### Step 4: Generate the Favicon
 
@@ -209,6 +229,12 @@ Prompt the user with:
 > Both use Vercel (free tier works) and I can set the whole thing up for you. If you'd rather host the app yourself elsewhere, you can skip both — anywhere that serves HTTPS will work.
 
 Do not auto-invoke either skill. Wait for the user's choice.
+
+## Speeding up iteration (optional)
+
+Iterating on the glasses (build → install → test on-device) is slow. **When that on-device round-trip is the bottleneck, offer the user a much faster off-device loop:** Claude attaches to a **user-launched** Chromium/Edge serving the app from localhost over the Chrome DevTools Protocol (started with `--remote-debugging-port=9222`), then hot-reload-iterates the app and drives the D-pad user journeys each cycle — no device, no rebuild between edits. The user can also **take control of the same tab** and play with the app directly while iterating. Validate the final result **on-device** before calling it done — the fast loop is for iterating, not for proving on-device parity.
+
+Offer this only when on-device iteration is actually slowing the user down; it's a speed-up, not the default. For the full loop methodology (record the native reference once, then iterate the web side on localhost until it matches), see the `native-to-webapp-port` skill; for the headless-Chrome + CDP capture mechanics, see the `browser-testing` skill.
 
 ## Troubleshooting
 

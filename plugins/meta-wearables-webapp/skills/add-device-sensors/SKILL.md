@@ -15,7 +15,11 @@ Before generating or modifying any code, read both:
 - `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
 - `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
 
+In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
+
+If these reference files are unavailable in an isolated eval, do not search `/`, home directories, or unrelated workspaces. Apply the requirements already present in this skill and continue.
 
 # Add Device Sensors to Meta Display Glasses WebApp
 
@@ -151,11 +155,20 @@ function onDeviceOrientation(e) {
 
 async function startMotionSensors() {
   // Request permission (required on some platforms)
-  if (typeof DeviceOrientationEvent.requestPermission === 'function') {
-    var state = await DeviceOrientationEvent.requestPermission();
-    if (state !== 'granted') {
+  if (typeof DeviceMotionEvent !== 'undefined' &&
+      typeof DeviceMotionEvent.requestPermission === 'function') {
+    var motionPermission = await DeviceMotionEvent.requestPermission();
+    if (motionPermission !== 'granted') {
       showToast('Sensor permission denied', 'error');
-      return;
+      return false;
+    }
+  }
+  if (typeof DeviceOrientationEvent !== 'undefined' &&
+      typeof DeviceOrientationEvent.requestPermission === 'function') {
+    var orientationPermission = await DeviceOrientationEvent.requestPermission();
+    if (orientationPermission !== 'granted') {
+      showToast('Sensor permission denied', 'error');
+      return false;
     }
   }
 
@@ -164,6 +177,7 @@ async function startMotionSensors() {
 
   window.addEventListener('deviceorientation', onDeviceOrientation);
   orientationListening = true;
+  return true;
 }
 
 function stopMotionSensors() {
@@ -182,8 +196,9 @@ Action handlers in `handleAppAction()`:
 
 ```javascript
 case 'start-sensors':
-  startMotionSensors();
-  showToast('Sensors started', 'success');
+  startMotionSensors().then(function(started) {
+    if (started) showToast('Sensors started', 'success');
+  });
   break;
 
 case 'stop-sensors':

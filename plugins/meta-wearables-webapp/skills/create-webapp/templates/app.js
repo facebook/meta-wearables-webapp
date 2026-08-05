@@ -1,3 +1,11 @@
+/**
+ * Copyright (c) Meta Platforms, Inc. and affiliates.
+ * All rights reserved.
+ *
+ * This source code is licensed under the BSD-style license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+
 (function() {
   'use strict';
 
@@ -128,6 +136,7 @@
     var ws = null;
     var reconnectTimer = null;
     var reconnectDelay = 1000;
+    var shouldReconnect = true;
 
     function connect() {
       ws = new WebSocket(url);
@@ -148,6 +157,7 @@
 
       ws.onclose = function() {
         if (handlers.onClose) handlers.onClose();
+        if (!shouldReconnect) return;
         reconnectTimer = setTimeout(function() {
           reconnectDelay = Math.min(reconnectDelay * 2, 30000);
           connect();
@@ -168,6 +178,7 @@
         }
       },
       close: function() {
+        shouldReconnect = false;
         clearTimeout(reconnectTimer);
         if (ws) ws.close();
       },

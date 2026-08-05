@@ -2,7 +2,7 @@
 # Copyright (c) Meta Platforms, Inc. and affiliates.
 # All rights reserved.
 #
-# This source code is licensed under the license found in the
+# This source code is licensed under the BSD-style license found in the
 # LICENSE file in the root directory of this source tree.
 
 # Install Meta Wearables Web App AI development config into your project.
@@ -20,26 +20,29 @@ set -euo pipefail
 REPO="facebookincubator/meta-wearables-webapp"
 BRANCH="main"
 ARCHIVE_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
-EXTRACT_DIR="meta-wearables-webapp-${BRANCH}"
+ARCHIVE_DIR="meta-wearables-webapp-${BRANCH}"
+TEMP_DIR=""
+EXTRACT_DIR=""
 
 safe_cleanup() {
-  if [ -z "${EXTRACT_DIR:-}" ]; then
-    echo "Warning: EXTRACT_DIR is empty, skipping cleanup." >&2
+  if [ -z "${TEMP_DIR:-}" ]; then
     return 0
   fi
-  if [[ ! "$EXTRACT_DIR" =~ ^meta-wearables-webapp- ]]; then
-    echo "Warning: EXTRACT_DIR does not match expected pattern, skipping cleanup." >&2
+  if [[ ! "$(basename "$TEMP_DIR")" =~ ^meta-wearables-webapp\. ]]; then
+    echo "Warning: TEMP_DIR does not match expected pattern, skipping cleanup." >&2
     return 0
   fi
-  if [ -d "$EXTRACT_DIR" ]; then
-    rm -rf "$EXTRACT_DIR"
+  if [ -d "$TEMP_DIR" ]; then
+    rm -rf "$TEMP_DIR"
   fi
 }
 trap safe_cleanup EXIT
 
 download_archive() {
-  if [ ! -d "${EXTRACT_DIR}" ]; then
-    curl -sL "$ARCHIVE_URL" | tar xz 2>/dev/null
+  if [ -z "${TEMP_DIR:-}" ]; then
+    TEMP_DIR="$(mktemp -d "${TMPDIR:-/tmp}/meta-wearables-webapp.XXXXXX")"
+    EXTRACT_DIR="${TEMP_DIR}/${ARCHIVE_DIR}"
+    curl -sL "$ARCHIVE_URL" | tar xz -C "$TEMP_DIR" 2>/dev/null
   fi
 }
 

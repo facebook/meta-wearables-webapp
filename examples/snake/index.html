@@ -17,7 +17,7 @@
         <span class="header-meta" id="score-display">Score: 0</span>
       </header>
       <div class="content game-content">
-        <canvas id="game-canvas" width="560" height="460"></canvas>
+        <canvas id="game-canvas" width="560" height="460" role="img" aria-label="Snake game canvas"></canvas>
       </div>
       <nav class="nav-bar">
         <button class="nav-item focusable primary" data-action="start-game">New Game</button>
@@ -40,7 +40,7 @@
     <!-- High Scores screen -->
     <div id="scores" class="screen hidden">
       <header class="header">
-        <button class="back-btn focusable" data-action="back">&#8592;</button>
+        <button class="back-btn focusable" data-action="back" aria-label="Back">&#8592;</button>
         <h1>High Scores</h1>
       </header>
       <div class="content">

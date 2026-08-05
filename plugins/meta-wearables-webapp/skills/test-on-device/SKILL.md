@@ -92,6 +92,8 @@ If a server already exists, verify Vercel compatibility:
 
 ## Steps
 
+For advice or planning questions, explain this workflow and provide the commands, but do not install global packages, deploy, or mutate the user's app. Only execute setup commands when the user explicitly asks you to perform the setup and provides the app directory.
+
 ### 0. Verify Vercel Setup
 
 Run `vercel whoami` to detect the user's current state, then branch:
@@ -106,7 +108,7 @@ Run `vercel whoami` to detect the user's current state, then branch:
 >
 > Want me to proceed with Vercel?
 
-If yes, wait for the user to confirm they've created the Vercel account, then run `npm i -g vercel` yourself. After install completes, proceed to the login branch below.
+If yes, wait for the user to confirm they've created the Vercel account and explicitly asks you to perform setup, then run `npm i -g vercel` yourself. After install completes, proceed to the login branch below.
 
 **c. Not logged in** — CLI is installed but `vercel whoami` returns an auth error. Tell the user:
 

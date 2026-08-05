@@ -6,6 +6,18 @@ An AI toolkit that helps you build Web Apps for Meta Ray-Ban Display glasses. It
 
 Web Apps are standard HTML/CSS/JavaScript applications rendered on Meta Ray-Ban Display (MRBD) glasses — an easy and familiar way to build experiences for the glasses, especially with AI-assisted coding tools. See the full [Web Apps developer documentation](https://wearables.developer.meta.com/docs/develop/webapps) on the Wearables Developer Center for capabilities, design constraints, and best practices.
 
+## Live Documentation MCP
+
+MCP-capable tools can query current Web Apps docs through the shared public Wearables MCP server:
+
+```text
+https://mcp.developer.meta.com/wearables
+```
+
+Use the `search_webapps_docs` tool for Web Apps questions. The server does not require auth, OAuth, tokens, or custom authorization headers.
+
+If your AI tool supports MCP, configure this remote HTTP server and call `search_webapps_docs` for current Web Apps documentation. If your tool does not support MCP, use the developer docs URL above directly.
+
 ## Quick Start
 
 ### 1. Install AI Skills
@@ -30,23 +42,23 @@ Web Apps are standard HTML/CSS/JavaScript applications rendered on Meta Ray-Ban 
 ```bash
 # Add the marketplace (one-time, run in your terminal)
 codex plugin marketplace add https://github.com/facebookincubator/meta-wearables-webapp
+```
 
-# Install the plugin (run in your terminal)
 Start Codex, and type `/plugins` → tab to **[Meta Wearables]** → install.
 
-# Update plugin
-
+```bash
 # Refresh the marketplace source
 codex plugin marketplace upgrade meta-wearables
+```
 
 Then inside Codex: go to `/plugins` — if a newer version is available, select the option to update.
-```
 
 #### Option B — Install Script (all tools)
 
 ```bash
 # Clone this repo and Install for your preferred tool
 git clone https://github.com/facebookincubator/meta-wearables-webapp.git
+cd meta-wearables-webapp
 ./install-skills.sh claude    # Claude Code
 ./install-skills.sh cursor    # Cursor
 ./install-skills.sh copilot   # GitHub Copilot
@@ -108,10 +120,33 @@ Use the plugin's publish skill to generate a QR code. Scan it with your phone to
 | Skill | Description |
 |-------|-------------|
 | `create-webapp` | Scaffold a new web app from scratch |
-| `add-screen` | Add a new screen or view to an existing app |
-| `add-button` | Add buttons and action handlers |
+| `add-ui` | Add or refine display-friendly UI |
 | `connect-api` | Connect to REST/WebSocket APIs |
-| `add-sensors` | Accelerometer, gyroscope, compass |
+| `add-device-sensors` | Accelerometer, gyroscope, compass, GPS, and geolocation |
+| `add-local-storage` | Add persistent browser storage |
+| `test-on-device` | Test and debug on desktop and glasses |
+| `publish-to-vercel` | Deploy to a public HTTPS URL |
+| `qr-code` | Generate add-to-glasses QR codes |
+| `passcode-for-testing` | Add a lightweight test passcode gate |
+
+## Display Simulator Chrome Extension
+
+The **Meta Ray-Ban Display Web App Simulator** is a Chrome extension that recreates the 600×600 display surface of Meta Ray-Ban Display glasses in your browser — additive blending, environment backgrounds, D-pad input, display tuning, and recording — so you can preview and QA your web app without the hardware.
+
+### Install
+
+1. Install the [Meta Ray-Ban Display Web App Simulator](https://chromewebstore.google.com/detail/jpjlmmodokemlepklkdbimceggpbjcll) from the Chrome Web Store.
+2. Navigate to your web app and click the extension icon to toggle the simulator on.
+
+### Features
+
+- **600×600 display frame** — Exact glasses resolution with optional frame overlay and additive blending.
+- **Environment backgrounds** — Built-in scenes, custom image upload, animated backgrounds, and live webcam for real-world blending preview.
+- **D-pad input** — On-screen directional buttons and Select that dispatch keyboard events. Physical arrow keys and Enter work too.
+- **Display settings** — App brightness, background brightness, background blur, and auto-dimming controls.
+- **Viewport recorder** — Record the simulator viewport as a downloadable WebM video for demos or bug reports.
+- **View on Glasses QR** — Generate a deep link QR code to add the web app on your glasses, or share it with others so they can add it too.
+- **QA checklist** — Automated checks for viewport meta, favicon, D-pad focusable elements, horizontal overflow, and visible focus styles.
 
 ## Examples
 

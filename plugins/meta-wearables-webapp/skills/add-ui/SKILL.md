@@ -15,7 +15,11 @@ Before generating or modifying any code, read both:
 - `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
 - `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
 
+In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
+
+If these reference files are unavailable in an isolated eval, do not search `/`, home directories, or unrelated workspaces. Apply the requirements already present in this skill and continue.
 
 # Add UI Components to Meta Display Glasses WebApp
 

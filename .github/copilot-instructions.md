@@ -1,8 +1,14 @@
 # Meta Wearables Web Apps — AI Instructions
 
-> Full API reference: [https://wearables.developer.meta.com/llms.txt?full=true](https://wearables.developer.meta.com/llms.txt?full=true)
+> Developer docs: [https://wearables.developer.meta.com/docs/develop/webapps](https://wearables.developer.meta.com/docs/develop/webapps)
 >
-> Developer docs: [https://wearables.developer.meta.com/docs/develop/](https://wearables.developer.meta.com/docs/develop/)
+> Web Apps docs MCP: [https://mcp.developer.meta.com/wearables](https://mcp.developer.meta.com/wearables)
+>
+> MCP tool: `search_webapps_docs`
+>
+> Auth: no auth, OAuth, tokens, or custom authorization headers are required.
+
+If your AI tool supports MCP, configure `https://mcp.developer.meta.com/wearables` as a remote HTTP MCP server and call `search_webapps_docs` for current Web Apps documentation. If MCP is unavailable, use the developer docs URL above directly.
 
 ## Design & Performance Constraints
 
@@ -10,6 +16,8 @@ All webapps target the Meta Display Glasses — a 600x600dp additive waveguide d
 
 ### Display
 - **Viewport:** `<meta name="viewport" content="width=600, height=600, initial-scale=1.0">`
+- **Description:** `<meta name="description" content="...">` in the `<head>` with a brief, app-specific summary of what the app does.
+- **MRBD identification:** `<meta name="mrbd-web-app-capable" content="yes">` in the `<head>` to positively identify the page as a Meta Display Glasses (MRBD) compatible webapp (keep `content="yes"` verbatim).
 - **Additive display:** Black (#000000) is transparent. Use dark gray (#1C1E21) as background, white (#FFFFFF) for text/icons.
 - **Safe zone:** 8dp margin all sides (584x584dp usable). Header: 24dp from top, 64dp tall. Button height: 88dp.
 - **Typography:** H1 28dp bold, H2 22dp bold, Body 16dp, Body2 14dp, Meta 12dp. Min 14dp for interactive elements.
@@ -889,6 +897,12 @@ No touch input is available. The EMG wrist band translates gestures into D-pad e
 
 ## Workflow
 
+### Device Testing Trigger
+
+If the user says they want to "test on device", "test on the glasses", "open this on the glasses", or anything equivalent, treat that as a request to use the `/test-on-device` skill and the hosted HTTPS preview flow.
+
+Do **not** satisfy an on-device testing request by creating only a local server (`python3 -m http.server`, `localhost`, LAN IP, etc.). A local server is fine for desktop smoke testing, but it is **not** the default path for Meta Display Glasses testing in this repo.
+
 ### Step 1: Understand the Request
 
 If the user specified a webapp type, proceed to Step 2.
@@ -915,6 +929,8 @@ Generate three files using these templates as the foundation:
 
 Key requirements for the HTML:
 - Viewport: `width=600, height=600`
+- Description: `<meta name="description" content="...">` in the `<head>` with a brief, app-specific summary of what the app does. Replace the template placeholder with real copy.
+- MRBD identification: `<meta name="mrbd-web-app-capable" content="yes">` in the `<head>` to positively identify the page as a Meta Display Glasses (MRBD) compatible webapp. Keep `content="yes"` verbatim.
 - All interactive elements: `class="focusable"` and `tabindex="0"` if not a button
 - Button actions: `data-action="action-name"`
 - Back buttons: `data-action="back"` with `&#8592;` arrow character
@@ -947,6 +963,8 @@ See [references/ui-components.md](references/ui-components.md) for reusable HTML
 - [ ] Buttons have `data-action` attributes
 - [ ] Back buttons use `data-action="back"`
 - [ ] Viewport is `width=600, height=600`
+- [ ] `<head>` has a `<meta name="description">` tag with an app-specific summary (placeholder replaced)
+- [ ] `<head>` has `<meta name="mrbd-web-app-capable" content="yes">`
 - [ ] D-pad navigation works (arrow keys move focus with wrap-around)
 - [ ] Enter key activates focused elements
 - [ ] Escape key navigates back
@@ -1387,6 +1405,10 @@ python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/message_qr.png
 
 
 # Test on Device
+
+When the user asks to test "on device", "on the glasses", or on the physical hardware, always use the `/test-on-device` skill flow in this section.
+
+Do **not** stop at a local browser server or a LAN-only URL. The expected workflow here is a hosted HTTPS preview URL, QR code, and glasses setup flow. Local hosting may be used only as a separate desktop sanity check before deploy, not as the final answer to an on-device testing request.
 
 Push uncommitted webapp changes to Vercel and get an HTTPS preview URL for testing directly on Meta Display Glasses — without committing code.
 

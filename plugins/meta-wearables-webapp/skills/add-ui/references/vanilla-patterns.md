@@ -123,7 +123,7 @@ case 'go-settings':
 case 'delete-item':
   var itemId = element.dataset.id;
   state.data.items = state.data.items.filter(function(i) { return i.id !== itemId; });
-  saveData();
+  saveData(state.data);
   navigateBack();
   break;
 ```
@@ -141,7 +141,7 @@ case 'delete-item':
 case 'toggle-sound':
   state.data.soundEnabled = !state.data.soundEnabled;
   document.getElementById('sound-value').textContent = state.data.soundEnabled ? 'On' : 'Off';
-  saveData();
+  saveData(state.data);
   break;
 ```
 
@@ -159,14 +159,14 @@ case 'toggle-sound':
 case 'increment':
   state.data.count++;
   document.getElementById('counter-value').textContent = state.data.count;
-  saveData();
+  saveData(state.data);
   break;
 
 case 'decrement':
   if (state.data.count > 0) {
     state.data.count--;
     document.getElementById('counter-value').textContent = state.data.count;
-    saveData();
+    saveData(state.data);
   }
   break;
 ```

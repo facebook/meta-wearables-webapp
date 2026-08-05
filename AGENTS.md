@@ -1,7 +1,11 @@
 # Meta Wearables Web Apps
 
-> Full API reference: https://wearables.developer.meta.com/llms.txt?full=true
-> Developer docs: https://wearables.developer.meta.com/docs/develop/
+> Developer docs: https://wearables.developer.meta.com/docs/develop/webapps
+> Web Apps docs MCP: https://mcp.developer.meta.com/wearables
+> MCP tool: search_webapps_docs
+> Auth: no auth, OAuth, tokens, or custom authorization headers are required.
+
+If your AI tool supports MCP, configure `https://mcp.developer.meta.com/wearables` as a remote HTTP MCP server and call `search_webapps_docs` for current Web Apps documentation. If MCP is unavailable, use the developer docs URL above directly.
 
 ## Design & Performance Constraints
 
