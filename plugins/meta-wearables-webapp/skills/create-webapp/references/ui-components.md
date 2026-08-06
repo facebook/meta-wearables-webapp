@@ -67,6 +67,5 @@ Reusable HTML patterns for Meta Display Glasses webapps. All components use the 
 - All interactive elements must have `class="focusable"`
 - Non-button interactive elements need `tabindex="0"`
 - Buttons use `data-action="action-name"` for click handling
-- Back buttons use `data-action="back"` with `&#8592;` arrow character
 - Content must fit within 600×600 viewport
 - Scrollable containers need `overflow-y: auto` and `max-height`

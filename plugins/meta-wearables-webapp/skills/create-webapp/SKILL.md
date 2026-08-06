@@ -12,10 +12,8 @@ argument-hint: "[app-type] [app-name]"
 
 Before generating or modifying any code, read both:
 
-- `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
-
-In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+- `../../references/display-guidelines.md`
+- `../../references/performance-guidelines.md`
 
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
 
@@ -38,8 +36,10 @@ Create complete webapps for Meta Display Glasses with EMG wrist-band input, D-pa
 ## Input Model
 
 - **D-pad (Up/Down/Left/Right)**: Navigate focusable elements (EMG band or captouch)
-- **Enter / Tap**: Select/activate focused element (EMG tap gesture)
-- **Back / Escape**: Navigate to previous screen
+- **Pinch = activate**: An EMG pinch fires Enter/click on the **focused** element — it is not a positioned click. Build focusable, keyboard-activatable UI.
+- **Continuous drag is opt-in**: There is no free cursor by default. To receive a continuous drag stream (sliders, maps, drawing), set `body { touch-action: none; }` in the initial CSS — see `/add-gestures`.
+- **Back**: A thumb + middle-finger back gesture (or Escape) returns to the previous screen — no back button needed
+- **Text entry**: Standard HTML text fields open the on-glasses handwriting + voice composer on focus + tap — no SDK call needed (see `/add-text-input`).
 - **Sensors**: Accelerometer, gyroscope, magnetometer, orientation via W3C Generic Sensor API
 
 No touch input is available. The EMG wrist band translates gestures into D-pad events automatically.
@@ -49,6 +49,9 @@ No touch input is available. The EMG wrist band translates gestures into D-pad e
 | Skill | Purpose | When to Use |
 |-------|---------|-------------|
 | `/add-ui` | Add screens, buttons, UI components | Expanding the app |
+| `/add-text-input` | Text fields, search boxes, forms (on-glasses composer) | Any text entry |
+| `/add-gestures` | Pinch-to-activate, opt-in continuous drag | Sliders, maps, drawing, games |
+| `/add-offline` | Service Worker + Cache API | Work without Wi-Fi, flaky connections |
 | `/connect-api` | Add API connection | Connect to REST/WebSocket APIs |
 | `/add-device-sensors` | Add sensor data | Motion/orientation/GPS features |
 | `/add-local-storage` | Add data persistence | Save settings, cache, state |
@@ -97,7 +100,6 @@ Key requirements for the HTML:
 - MRBD identification: `<meta name="mrbd-web-app-capable" content="yes">` in the `<head>` to positively identify the page as a Meta Display Glasses (MRBD) compatible webapp. Keep `content="yes"` verbatim.
 - All interactive elements: `class="focusable"` and `tabindex="0"` if not a button
 - Button actions: `data-action="action-name"`
-- Back buttons: `data-action="back"` with `&#8592;` arrow character
 - Each screen is a `<div class="screen">` with a unique `id`
 
 Customize these sections in `app.js` for each app:
@@ -177,7 +179,6 @@ See [references/ui-components.md](references/ui-components.md) for reusable HTML
 - [ ] All screens have `.screen` class and unique `id`
 - [ ] All interactive elements have `.focusable` class
 - [ ] Buttons have `data-action` attributes
-- [ ] Back buttons use `data-action="back"`
 - [ ] Viewport is `width=600, height=600`
 - [ ] `<head>` has a `<meta name="description">` tag with an app-specific summary (placeholder replaced)
 - [ ] `<head>` has `<meta name="mrbd-web-app-capable" content="yes">`
@@ -208,6 +209,9 @@ Created: ~/meta-display-glasses-webapps/<app-name>/
 
 Expand with:
   /add-ui               Add screens, buttons, UI components
+  /add-text-input       Add text fields, search boxes, forms
+  /add-gestures         Add sliders, drawing, maps (continuous drag)
+  /add-offline          Make the app work without Wi-Fi
   /connect-api          Connect to more APIs
   /add-device-sensors   Add motion/orientation/GPS sensors
   /add-local-storage    Add data persistence
@@ -234,7 +238,7 @@ Do not auto-invoke either skill. Wait for the user's choice.
 
 Iterating on the glasses (build → install → test on-device) is slow. **When that on-device round-trip is the bottleneck, offer the user a much faster off-device loop:** Claude attaches to a **user-launched** Chromium/Edge serving the app from localhost over the Chrome DevTools Protocol (started with `--remote-debugging-port=9222`), then hot-reload-iterates the app and drives the D-pad user journeys each cycle — no device, no rebuild between edits. The user can also **take control of the same tab** and play with the app directly while iterating. Validate the final result **on-device** before calling it done — the fast loop is for iterating, not for proving on-device parity.
 
-Offer this only when on-device iteration is actually slowing the user down; it's a speed-up, not the default. For the full loop methodology (record the native reference once, then iterate the web side on localhost until it matches), see the `native-to-webapp-port` skill; for the headless-Chrome + CDP capture mechanics, see the `browser-testing` skill.
+Offer this only when on-device iteration is actually slowing the user down; it's a speed-up, not the default.
 
 ## Troubleshooting
 
@@ -244,7 +248,7 @@ Offer this only when on-device iteration is actually slowing the user down; it's
 | Focus ring not visible | Verify `.focusable` class on interactive elements |
 | D-pad not navigating | Check `moveFocus()` handles the current screen |
 | Enter not activating | Verify `data-action` attribute on element |
-| Back button not working | Check `data-action="back"` or Escape handler |
+| Back navigation not working | Check `navigateBack()`, the Escape handler, or the back gesture |
 | API calls failing | Check CORS headers, use proxy if needed |
 | API data not updating | Clear cache: `state.cache = {}` |
 | Sensor data not flowing | Check sensor types are valid, verify device support |

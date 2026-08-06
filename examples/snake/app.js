@@ -312,6 +312,19 @@
     }
   });
 
+  // Return to home from a sub-screen. On-glasses this is triggered by the
+  // thumb + middle-finger back gesture (or Escape) — no back button needed.
+  function goBack() {
+    showScreen('home');
+    if (gameStarted && !running) {
+      // Resume if game was paused
+      running = true;
+      gameLoop = setInterval(tick, TICK_MS);
+    } else if (!gameStarted) {
+      drawIdle();
+    }
+  }
+
   // --- Actions ---
   document.addEventListener('click', function (e) {
     const btn = e.target.closest('[data-action]');
@@ -332,14 +345,7 @@
         showScreen('scores');
         break;
       case 'back':
-        showScreen('home');
-        if (gameStarted && !running) {
-          // Resume if game was paused
-          running = true;
-          gameLoop = setInterval(tick, TICK_MS);
-        } else if (!gameStarted) {
-          drawIdle();
-        }
+        goBack();
         break;
       case 'dismiss-overlay':
         gameOverOverlay.classList.add('hidden');
@@ -349,6 +355,16 @@
         saveScores([]);
         renderScoresList();
         break;
+    }
+  });
+
+  // Escape / back gesture returns from a sub-screen to home.
+  document.addEventListener('keydown', function (e) {
+    if (e.key !== 'Escape') return;
+    const scores = document.getElementById('scores');
+    if (scores && !scores.classList.contains('hidden')) {
+      e.preventDefault();
+      goBack();
     }
   });
 

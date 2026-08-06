@@ -51,6 +51,8 @@ self.addEventListener('fetch', (e) => {
 - Show meaningful UI immediately — don't block render on API calls.
 - Handle fetch failures gracefully with cached or fallback content.
 
+For full offline support (app-shell precache, cache-first fetch, online/offline UI), see the `add-offline` skill, which builds on the snippet above.
+
 ## Checklist
 
 - [ ] Viewport is `width=600, height=600` with `overflow: hidden`

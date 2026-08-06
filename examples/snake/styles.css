@@ -76,14 +76,6 @@ body {
   font-weight: 600;
   color: var(--accent-secondary);
 }
-.back-btn {
-  background: transparent;
-  color: var(--text-primary);
-  font-size: 22px;
-  padding: 8px 12px;
-  border-radius: var(--radius-sm);
-  border: 2px solid transparent;
-}
 
 /* --- Content Area --- */
 .content {

@@ -8,7 +8,7 @@
       "name": "meta-wearables-webapp",
       "source": "./plugins/meta-wearables-webapp",
       "description": "Skills for building Meta Display Glasses webapps",
-      "version": "125.0.0"
+      "version": "127.0.0"
     }
   ]
 }

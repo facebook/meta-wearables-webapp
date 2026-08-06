@@ -8,9 +8,7 @@ Implementation patterns for vanilla JS webapps created via `/create-webapp`.
 
 ```html
 <div id="screen-name" class="screen hidden">
-  <header class="header">
-    <button class="back-btn focusable" data-action="back">&#8592;</button>
-    <h1>Screen Title</h1>
+  <header class="header">    <h1>Screen Title</h1>
   </header>
   <div class="content">
     <!-- Screen content here -->
@@ -32,9 +30,7 @@ The `collectScreens()` function automatically finds all elements with `.screen` 
 
 ```html
 <div id="list-screen" class="screen hidden">
-  <header class="header">
-    <button class="back-btn focusable" data-action="back">&#8592;</button>
-    <h1>Items</h1>
+  <header class="header">    <h1>Items</h1>
   </header>
   <div class="content">
     <div id="item-list" class="list-container">
@@ -48,9 +44,7 @@ The `collectScreens()` function automatically finds all elements with `.screen` 
 
 ```html
 <div id="detail-screen" class="screen hidden">
-  <header class="header">
-    <button class="back-btn focusable" data-action="back">&#8592;</button>
-    <h1 id="detail-title">Detail</h1>
+  <header class="header">    <h1 id="detail-title">Detail</h1>
   </header>
   <div class="content">
     <div id="detail-content"></div>
@@ -66,9 +60,7 @@ The `collectScreens()` function automatically finds all elements with `.screen` 
 
 ```html
 <div id="form-screen" class="screen hidden">
-  <header class="header">
-    <button class="back-btn focusable" data-action="back">&#8592;</button>
-    <h1>Add Item</h1>
+  <header class="header">    <h1>Add Item</h1>
   </header>
   <div class="content">
     <div class="form-field">

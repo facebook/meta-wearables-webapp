@@ -21,7 +21,7 @@ All data stays on the local machine — nothing is sent to any third-party servi
 
 The QR generator script is at:
 ```
-.claude/skills/qr-code/scripts/qr_generator.py
+skills/qr-code/scripts/qr_generator.py
 ```
 
 Run it with `python3` (macOS/Linux) or `python` (Windows).
@@ -31,7 +31,7 @@ Run it with `python3` (macOS/Linux) or `python` (Windows).
 Save the QR code as a PNG image file:
 
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/qr_output.png "https://example.com"
+python3 skills/qr-code/scripts/qr_generator.py --png /tmp/qr_output.png "https://example.com"
 ```
 
 ### Options
@@ -57,10 +57,10 @@ python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/qr_output.png 
 
 Generate QR for a URL:
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/link_qr.png --open "https://meta.com"
+python3 skills/qr-code/scripts/qr_generator.py --png /tmp/link_qr.png --open "https://meta.com"
 ```
 
 Generate QR for plain text:
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/message_qr.png --open "Thank god it's Friday!"
+python3 skills/qr-code/scripts/qr_generator.py --png /tmp/message_qr.png --open "Thank god it's Friday!"
 ```

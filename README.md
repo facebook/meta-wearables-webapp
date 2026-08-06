@@ -121,7 +121,10 @@ Use the plugin's publish skill to generate a QR code. Scan it with your phone to
 |-------|-------------|
 | `create-webapp` | Scaffold a new web app from scratch |
 | `add-ui` | Add or refine display-friendly UI |
+| `add-text-input` | Text fields, search boxes, and forms via the on-glasses composer |
+| `add-gestures` | EMG pinch-to-activate and opt-in continuous drag |
 | `connect-api` | Connect to REST/WebSocket APIs |
+| `add-offline` | Service Worker + Cache API offline support |
 | `add-device-sensors` | Accelerometer, gyroscope, compass, GPS, and geolocation |
 | `add-local-storage` | Add persistent browser storage |
 | `test-on-device` | Test and debug on desktop and glasses |

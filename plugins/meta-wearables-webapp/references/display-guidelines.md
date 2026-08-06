@@ -104,6 +104,14 @@ The display has no touchscreen, mouse, or keyboard. All input comes through:
 - **Neural Band (EMG):** Thumb pinch gestures via wrist band. Discrete select/back and continuous movement.
 - **No cursor:** Focus jumps between elements — no free-roaming pointer.
 
+### Pinch, drag, and text entry
+
+- **Pinch = activation of the focused element.** A pinch fires Enter/click on `document.activeElement` — it is **not** a positioned click. Build focusable, keyboard-activatable UI (`<button>`, `<a href>`, `[tabindex="0"]`).
+- **D-pad moves focus.** Pinch then activates whatever holds focus.
+- **Continuous drag is opt-in, page-level.** There is no free cursor by default. To receive a continuous drag stream (sliders, maps, drawing, games), set `body { touch-action: none; }` in the **initial CSS** — it is read on `<body>` once at page load, so post-load JS changes and per-element values are not honored. See the `add-gestures` skill.
+- **Pointer Lock is not supported** — do not call `requestPointerLock`.
+- **Standard text fields open the on-glasses composer** (handwriting + voice) on **focus + tap** — not on focus alone, and not via programmatic `.focus()`. `type=password` and non-text input types do not open it. See the `add-text-input` skill.
+
 Keep navigation shallow — ideally 3 steps or fewer to reach any action.
 
 ## Interaction States

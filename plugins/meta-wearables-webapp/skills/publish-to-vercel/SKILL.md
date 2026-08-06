@@ -214,7 +214,7 @@ fb-viewapp://web_app_deep_link?appName=my-glasses-app&appUrl=https%3A%2F%2Fmy-gl
 Use the `/qr-code` skill to generate the QR code:
 
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
 ```
 
 The PNG is saved to the app directory. If your environment supports rendering images inline (e.g. Claude Code's Read tool), display the QR code directly. Otherwise, provide the file path and tell the user to open it and scan from their phone.
@@ -248,7 +248,7 @@ URL=$(vercel --prod)
 vercel alias set "$URL" <project-name>.vercel.app
 
 # Regenerate QR code
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
 ```
 
 The stable URL automatically serves the latest version. No `git push` needed — Vercel receives the files directly.

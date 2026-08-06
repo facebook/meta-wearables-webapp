@@ -12,10 +12,8 @@ argument-hint: "[component-type] [name]"
 
 Before generating or modifying any code, read both:
 
-- `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
-
-In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+- `../../references/display-guidelines.md`
+- `../../references/performance-guidelines.md`
 
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
 
@@ -60,7 +58,7 @@ All components must follow these constraints regardless of framework:
 | Nav Bar | Row of action buttons at bottom | Screen-level actions |
 | List | Scrollable list of items | Displaying collections |
 | Card | Data display block | Showing stats, values |
-| Form | Input fields with submit | Collecting user input |
+| Form | Input fields with submit | Collecting user input (see `/add-text-input`) |
 | Toggle | On/off setting | Boolean settings |
 | Counter | +/- with value display | Numeric adjustments |
 
@@ -77,6 +75,8 @@ Ask the user:
 
 Use [Vanilla JS patterns](references/vanilla-patterns.md) for HTML structure, event handling, and state management. Always apply the design rules above.
 
+For **text entry** (forms, search boxes, notes), use `/add-text-input` — standard text fields open the on-glasses handwriting + voice composer on focus + tap, so you don't build a keyboard.
+
 ### 3. Verify
 
 - [ ] Component is focusable (D-pad navigable)
@@ -92,4 +92,6 @@ Use [Vanilla JS patterns](references/vanilla-patterns.md) for HTML structure, ev
 
 - `/create-webapp` — Create a new webapp from scratch
 - `/connect-api` — Add API-connected actions
+- `/add-text-input` — Text fields, search boxes, and form inputs (on-glasses composer)
+- `/add-gestures` — Pinch-to-activate and opt-in continuous drag
 - `/add-device-sensors` — Add motion/orientation/GPS sensors

@@ -21,7 +21,10 @@ All webapps target the Meta Display Glasses — a 600x600dp additive waveguide d
 - **Colors:** #FFFFFF primary, #E4E6EB secondary, #B0B3B8 muted, #1C1E21 background. 4.5:1 contrast ratio minimum.
 
 ### Input
-- **D-pad (captouch):** Arrow keys navigate focus between elements. Enter selects. Escape goes back.
+- **D-pad (captouch):** Arrow keys navigate focus between elements. Enter (or an EMG pinch) activates the focused element.
+- **Pinch = activate:** An EMG pinch fires Enter/click on the focused element — not a positioned click. Continuous drag is opt-in via `body { touch-action: none; }` in the initial CSS — see the add-gestures skill.
+- **Back:** A thumb + middle-finger back gesture (or Escape) returns to the previous screen — no back button needed.
+- **Text entry:** Standard HTML text fields open the on-glasses handwriting + voice composer on focus + tap — see the add-text-input skill.
 - **No cursor, no touch:** Focus-based navigation only. All elements must be reachable via sequential D-pad navigation.
 - **Interaction states:** Idle (scale 1x, 80% opacity) → Focused (scale -8dp, 100% opacity) → Pressed.
 - Keep navigation shallow — 3 steps or fewer to any action.
@@ -40,8 +43,10 @@ Create complete webapps for Meta Display Glasses with EMG wrist-band input, D-pa
 ## Input Model
 
 - **D-pad (Up/Down/Left/Right)**: Navigate focusable elements (EMG band or captouch)
-- **Enter / Tap**: Select/activate focused element (EMG tap gesture)
-- **Back / Escape**: Navigate to previous screen
+- **Pinch = activate**: An EMG pinch fires Enter/click on the **focused** element — it is not a positioned click. Build focusable, keyboard-activatable UI.
+- **Continuous drag is opt-in**: There is no free cursor by default. To receive a continuous drag stream (sliders, maps, drawing), set `body { touch-action: none; }` in the initial CSS — see `/add-gestures`.
+- **Back**: A thumb + middle-finger back gesture (or Escape) returns to the previous screen — no back button needed
+- **Text entry**: Standard HTML text fields open the on-glasses handwriting + voice composer on focus + tap — no SDK call needed (see `/add-text-input`).
 - **Sensors**: Accelerometer, gyroscope, magnetometer, orientation via W3C Generic Sensor API
 
 No touch input is available. The EMG wrist band translates gestures into D-pad events automatically.
@@ -51,6 +56,9 @@ No touch input is available. The EMG wrist band translates gestures into D-pad e
 | Skill | Purpose | When to Use |
 |-------|---------|-------------|
 | `/add-ui` | Add screens, buttons, UI components | Expanding the app |
+| `/add-text-input` | Text fields, search boxes, forms (on-glasses composer) | Any text entry |
+| `/add-gestures` | Pinch-to-activate, opt-in continuous drag | Sliders, maps, drawing, games |
+| `/add-offline` | Service Worker + Cache API | Work without Wi-Fi, flaky connections |
 | `/connect-api` | Add API connection | Connect to REST/WebSocket APIs |
 | `/add-device-sensors` | Add sensor data | Motion/orientation/GPS features |
 | `/add-local-storage` | Add data persistence | Save settings, cache, state |
@@ -102,7 +110,6 @@ Key requirements for the HTML:
 - MRBD identification: `<meta name="mrbd-web-app-capable" content="yes">` in the `<head>` to positively identify the page as a Meta Display Glasses (MRBD) compatible webapp. Keep `content="yes"` verbatim.
 - All interactive elements: `class="focusable"` and `tabindex="0"` if not a button
 - Button actions: `data-action="action-name"`
-- Back buttons: `data-action="back"` with `&#8592;` arrow character
 - Each screen is a `<div class="screen">` with a unique `id`
 
 Customize these sections in `app.js` for each app:
@@ -130,7 +137,6 @@ See [references/ui-components.md](references/ui-components.md) for reusable HTML
 - [ ] All screens have `.screen` class and unique `id`
 - [ ] All interactive elements have `.focusable` class
 - [ ] Buttons have `data-action` attributes
-- [ ] Back buttons use `data-action="back"`
 - [ ] Viewport is `width=600, height=600`
 - [ ] `<head>` has a `<meta name="description">` tag with an app-specific summary (placeholder replaced)
 - [ ] `<head>` has `<meta name="mrbd-web-app-capable" content="yes">`
@@ -157,6 +163,9 @@ Created: ~/meta-display-glasses-webapps/<app-name>/
 
 Expand with:
   /add-ui               Add screens, buttons, UI components
+  /add-text-input       Add text fields, search boxes, forms
+  /add-gestures         Add sliders, drawing, maps (continuous drag)
+  /add-offline          Make the app work without Wi-Fi
   /connect-api          Connect to more APIs
   /add-device-sensors   Add motion/orientation/GPS sensors
   /add-local-storage    Add data persistence
@@ -172,7 +181,7 @@ Test locally by opening index.html in a browser and using arrow keys + Enter.
 | Focus ring not visible | Verify `.focusable` class on interactive elements |
 | D-pad not navigating | Check `moveFocus()` handles the current screen |
 | Enter not activating | Verify `data-action` attribute on element |
-| Back button not working | Check `data-action="back"` or Escape handler |
+| Back navigation not working | Check `navigateBack()`, the Escape handler, or the back gesture |
 | API calls failing | Check CORS headers, use proxy if needed |
 | API data not updating | Clear cache: `state.cache = {}` |
 | Sensor data not flowing | Check sensor types are valid, verify device support |
@@ -222,7 +231,7 @@ All components must follow these constraints regardless of framework:
 | Nav Bar | Row of action buttons at bottom | Screen-level actions |
 | List | Scrollable list of items | Displaying collections |
 | Card | Data display block | Showing stats, values |
-| Form | Input fields with submit | Collecting user input |
+| Form | Input fields with submit | Collecting user input (see `/add-text-input`) |
 | Toggle | On/off setting | Boolean settings |
 | Counter | +/- with value display | Numeric adjustments |
 
@@ -239,6 +248,8 @@ Ask the user:
 
 Use [Vanilla JS patterns](references/vanilla-patterns.md) for HTML structure, event handling, and state management. Always apply the design rules above.
 
+For **text entry** (forms, search boxes, notes), use `/add-text-input` — standard text fields open the on-glasses handwriting + voice composer on focus + tap, so you don't build a keyboard.
+
 ### 3. Verify
 
 - [ ] Component is focusable (D-pad navigable)
@@ -254,7 +265,309 @@ Use [Vanilla JS patterns](references/vanilla-patterns.md) for HTML structure, ev
 
 - `/create-webapp` — Create a new webapp from scratch
 - `/connect-api` — Add API-connected actions
+- `/add-text-input` — Text fields, search boxes, and form inputs (on-glasses composer)
+- `/add-gestures` — Pinch-to-activate and opt-in continuous drag
 - `/add-device-sensors` — Add motion/orientation/GPS sensors
+
+## Adding text input
+
+
+Add text entry to a webapp using **standard HTML form controls**. On the glasses, a focusable text control opens the on-device **composer** (handwriting + voice) when the wearer focuses it and taps. Whatever they enter is committed back into the field. **No SDK call is needed** — you do not build the composer; the glasses provide it.
+
+## Prerequisites
+
+- Existing webapp created via `/create-webapp`
+
+## How It Works
+
+Any standard focusable text control becomes voice + handwriting capable for free:
+
+- `<input type="text">`, `type="search"`, `type="email"`, `type="url"`, `type="tel"`, `type="number"`
+- `<textarea>`
+- `contenteditable` elements
+
+The interaction is **focus the field, then tap** to open the composer. Text is committed back to your field and fires the standard `input` and `change` events — read the value there, not from `keydown`.
+
+## ⚠️ Caveats (must-include)
+
+- The composer opens on **focus + tap**, not on focus alone. A programmatic `.focus()` will **not** surface it — the wearer must tap a focused field.
+- `inputmode`, `enterkeyhint`, and `type` do **not** change the composer. `type` only controls **eligibility**.
+- **Avoid `type=password`** (and `date`, `checkbox`, `radio`, etc.) — the composer won't open for them. Never rely on the composer for a password field.
+- You **cannot** choose handwriting-only vs dictation-only from the page — the wearer picks in the composer.
+- On some builds the composer may be unavailable. Keep fields usable and don't make required input depend on it without a fallback (e.g. D-pad selection).
+- Read committed text from `input` / `change` events — **not** `keydown` (there is no hardware keyboard).
+
+## Steps
+
+### 1. Add the Field with a Hint
+
+Give every field a `placeholder` (or `aria-label`) — it's the hint the wearer sees for what the field is for:
+
+```html
+<label for="note">Note</label>
+<textarea id="note" class="focusable" placeholder="Tap to write or speak"></textarea>
+```
+
+For a search box:
+
+```html
+<input id="q" type="search" class="focusable" placeholder="Tap to search">
+```
+
+### 2. Make It Focusable + Read the Value
+
+Standard form controls are focusable by default; ensure they participate in your D-pad focus order. Read the value on `input` (fires as the composer commits) or `change`:
+
+```javascript
+var note = document.getElementById('note');
+note.addEventListener('input', function () {
+  console.log('value:', note.value);   // composer commits fire 'input'
+  // e.g. persist via /add-local-storage, or run a search
+});
+```
+
+### 3. Wire Search / Submit (optional)
+
+```javascript
+var q = document.getElementById('q');
+q.addEventListener('change', function () {
+  runSearch(q.value);
+});
+```
+
+## Verify
+
+- [ ] Field is focusable and reachable via D-pad
+- [ ] Focus-then-tap opens the on-glasses composer
+- [ ] Committed text appears in the field
+- [ ] An `input` (or `change`) handler reads `field.value` — not `keydown`
+- [ ] Every field has a `placeholder` or `aria-label` hint
+- [ ] No `type=password` (or other non-text type) used for composer entry
+- [ ] App stays usable if the composer is unavailable on a build
+
+## Related Skills
+
+- `/add-ui` — Add forms, search bars, and other UI around the field
+
+## Adding pinch + drag gestures
+
+
+The EMG wrist band gives the wearer two interactions: a **pinch** (discrete select) and a **drag** (continuous motion). Pinch works everywhere with no code. Drag is **opt-in** at the page level and is for things that need smooth, continuous control — sliders, maps, drawing, simple games.
+
+## Prerequisites
+
+- Existing webapp created via `/create-webapp`
+
+## Pinch = Activate (always on)
+
+A pinch fires **Enter / click on the focused element** — it works like pressing Enter on the highlighted item. It is **not** a positioned click; it targets `document.activeElement`. So you don't write pinch code — you build **focusable, keyboard-activatable** UI and the pinch activates whatever has focus.
+
+- Use real interactive elements: `<button>`, `<a href>`, or `[tabindex="0"]` with a key/click handler.
+- The D-pad moves focus; the pinch activates the focused element.
+- A tap on a focused **text input** opens the on-glasses composer instead of reaching the page — see `/add-text-input`.
+
+Build these focusable elements (e.g. a `<button class="focusable" data-action="confirm">`) with `/add-ui`. That's all pinch needs — the rest of this skill is about **drag**.
+
+## Drag = Opt In (page-level)
+
+Continuous drag is **off by default**. Without opting in, there is **no free cursor and no drag** — EMG is D-pad focus + pinch only. To receive the sliding motion, set `touch-action: none` on the **`<body>`** in your **initial stylesheet**, then listen to Pointer events.
+
+### ⚠️ Caveats (must-include)
+
+- `touch-action` is read on **`<body>` only, once at page load**. Per-element values and post-load JS changes to it are **not** honored. Put it in the initial CSS that ships with the page.
+- Turn drag on for the **whole page**, not per element.
+- **Pointer Lock is not supported** — do **not** call `requestPointerLock`.
+- The exact drag event fields (e.g. `movementX`/`movementY`) are device-side. **Verify on-device** by logging `pointermove` before relying on specific fields; prefer `clientX`/`clientY` deltas you compute yourself.
+- A pinch on a focused text input opens the composer (see `/add-text-input`) rather than producing a drag.
+
+## Steps
+
+### 1. Enable Drag in the Initial CSS
+
+In `styles.css` (shipped with the page — not injected later):
+
+```css
+body { touch-action: none; }
+```
+
+### 2. Handle the Pointer Stream
+
+```javascript
+var slider = document.getElementById('slider');
+var dragging = false;
+
+slider.addEventListener('pointerdown', function (e) {
+  dragging = true;
+  slider.setPointerCapture(e.pointerId);
+});
+
+slider.addEventListener('pointermove', function (e) {
+  if (!dragging) return;
+  update(e.clientX, e.clientY);     // use client coords; verify deltas on-device
+});
+
+slider.addEventListener('pointerup', function () {
+  dragging = false;
+});
+```
+
+### 3. Keep Pinch Activation Working
+
+Even with drag enabled, keep your focusable elements intact so pinch-to-activate still works for buttons and links. Drag is additive, not a replacement for focus navigation.
+
+## Patterns
+
+### Slider
+
+```javascript
+function update(x) {
+  var rect = slider.getBoundingClientRect();
+  var pct = Math.max(0, Math.min(1, (x - rect.left) / rect.width));
+  setValue(pct);
+  // Reflect `pct` in your slider fill — see /add-ui
+}
+```
+
+### Pan / Draw
+
+```javascript
+var last = null;
+canvas.addEventListener('pointerdown', function (e) { last = { x: e.clientX, y: e.clientY }; });
+canvas.addEventListener('pointermove', function (e) {
+  if (!last) return;
+  drawLine(last.x, last.y, e.clientX, e.clientY);
+  last = { x: e.clientX, y: e.clientY };
+});
+canvas.addEventListener('pointerup', function () { last = null; });
+```
+
+## Verify
+
+- [ ] Pinch activates focused elements (buttons/links work with no extra code)
+- [ ] `body { touch-action: none; }` is in the **initial** stylesheet (not injected later)
+- [ ] With drag enabled, the pointer stream arrives (`pointerdown`/`move`/`up`)
+- [ ] Without opt-in, focus + pinch still work (no broken cursor expectation)
+- [ ] No `requestPointerLock` used
+- [ ] Drag event field assumptions verified on-device (logged `pointermove`)
+
+## Related Skills
+
+- `/add-ui` — Build the focusable elements pinch activates
+- `/add-text-input` — Why a tap on a focused field opens the composer instead of dragging
+
+## Adding offline support
+
+
+Make a webapp keep working when the glasses lose Wi-Fi, using a standard **Service Worker** + **Cache API**. Precache the app shell on install, serve cache-first on fetch, clean old caches on activate, and reflect online/offline state in the UI. No SDK required.
+
+The base offline Service Worker snippet already lives in `references/performance-guidelines.md` — reuse it as your starting point.
+
+## Prerequisites
+
+- Existing webapp created via `/create-webapp`
+- **Served over HTTPS** — Service Workers and the Cache API only run in a secure context. `file://` will **not** work. Use `/publish-to-vercel` for an HTTPS URL.
+
+## How It Works
+
+1. The app shell registers `sw.js`.
+2. On `install`, the worker precaches `index.html`, `app.js`, `styles.css`, and any other shell assets.
+3. On `fetch`, the worker serves cache-first (cached response, falling back to network).
+4. On `activate`, it deletes stale caches when you bump the cache version.
+5. The page reflects `navigator.onLine` and the `online` / `offline` events in the UI.
+
+## ⚠️ Caveats (must-include)
+
+- **HTTPS-only** (secure context). No exceptions.
+- **Precache real subresource URLs.** List the actual files the page loads — don't assume the app's request interceptor will serve Service-Worker-originated fetches.
+- Decide **what should be available offline.** Anything that needs fresh data from the internet won't work offline — show a friendly "offline" message in that case rather than failing silently.
+- Storage is **per-app.** Pair this with `/add-local-storage` so the wearer's settings/notes persist between sessions, not just the app shell.
+- Bump `CACHE` version when shell assets change, or wearers get stale files.
+
+## Steps
+
+### 1. Register the Service Worker
+
+In `app.js` (or an inline `<script>` in the shell):
+
+```javascript
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('/sw.js').catch(function (e) {
+      console.warn('SW registration failed', e);   // app still works online
+    });
+  });
+}
+```
+
+### 2. Create `sw.js` at the App Root
+
+```javascript
+const CACHE = 'app-v1';
+const FILES = ['/', '/index.html', '/app.js', '/styles.css', '/favicon.png'];
+
+self.addEventListener('install', function (e) {
+  e.waitUntil(caches.open(CACHE).then(function (c) { return c.addAll(FILES); }));
+});
+
+self.addEventListener('activate', function (e) {
+  e.waitUntil(
+    caches.keys().then(function (keys) {
+      return Promise.all(keys.filter(function (k) { return k !== CACHE; })
+                            .map(function (k) { return caches.delete(k); }));
+    })
+  );
+});
+
+self.addEventListener('fetch', function (e) {
+  e.respondWith(
+    caches.match(e.request).then(function (cached) {
+      return cached || fetch(e.request);
+    })
+  );
+});
+```
+
+### 3. Reflect Online / Offline in the UI
+
+Show or hide an offline indicator (e.g. `#offline-banner`) from `navigator.onLine` — build the indicator itself with `/add-ui`.
+
+```javascript
+function updateOnlineUI() {
+  var offline = !navigator.onLine;
+  // Show/hide your offline indicator based on `offline` — see /add-ui
+}
+window.addEventListener('online', updateOnlineUI);
+window.addEventListener('offline', updateOnlineUI);
+updateOnlineUI();
+```
+
+### 4. Handle Data That Needs the Network
+
+For screens that require fresh data, detect offline and show a message instead of a broken state:
+
+```javascript
+if (!navigator.onLine) {
+  showToast('No connection — showing last saved data', 'error');
+  renderFromCache();   // e.g. /add-local-storage
+  return;
+}
+```
+
+## Verify
+
+- [ ] App is served over HTTPS
+- [ ] `navigator.serviceWorker.register` resolves (check DevTools / console)
+- [ ] App shell (`index.html`, `app.js`, `styles.css`) is precached on install
+- [ ] Reloading offline still renders the app shell
+- [ ] Old caches are cleaned when `CACHE` version bumps (activate handler)
+- [ ] Offline banner / message appears when connection drops
+- [ ] Network-dependent screens degrade gracefully offline
+
+## Related Skills
+
+- `/add-local-storage` — Persist the wearer's data so it survives offline sessions
+- `/connect-api` — Add cache-aware fallbacks around API calls
+- `/add-ui` — Add the offline indicator
 
 ## Adding API connections
 
@@ -463,6 +776,10 @@ Add IMU and GPS sensor integration to an existing webapp using standard Web APIs
 The glasses expose sensor data through two API families:
 - **DeviceMotionEvent / DeviceOrientationEvent** — IMU data (accelerometer, gyroscope, compass heading, tilt)
 - **navigator.geolocation** — GPS location from the paired companion phone
+
+## Permissions: wait for a user action
+
+Request permission and start sensor/location updates **only** from an explicit user action (a Start/Enable button) — never on load, `init()`, or screen entry (`requestPermission()` only resolves inside a user gesture). If permission isn't granted, show a message and stop: don't add listeners, start a watch, or auto-retry.
 
 ## Prerequisites
 
@@ -859,6 +1176,7 @@ window.addEventListener('deviceorientation', function(e) {
 - [ ] Geolocation returns coordinates (may take several seconds on first call)
 - [ ] Sensors stop when leaving the screen
 - [ ] `clearWatch` is called when location watch is no longer needed
+- [ ] Permission/updates start only from a user action, and a denied permission stops the flow (no listeners, no watch, no retry)
 
 ## Related Skills
 
@@ -1241,7 +1559,7 @@ fb-viewapp://web_app_deep_link?appName=stage-my-glasses-app&appUrl=https%3A%2F%2
 Use the `/qr-code` skill to generate the QR code:
 
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
 ```
 
 The PNG is saved to the app directory. If your environment supports rendering images inline (e.g. Claude Code's Read tool), display the QR code directly. Otherwise, provide the file path and tell the user to open it and scan from their phone.
@@ -1286,7 +1604,7 @@ echo '{"ssoProtection":null}' | vercel api "/v9/projects/$PROJECT_ID" -X PATCH -
 vercel alias set "$URL" stage-<project-name>.vercel.app
 
 # Regenerate QR code
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
 ```
 
 After each deploy, show the QR code and setup instructions (following Steps 2-3).
@@ -1343,7 +1661,7 @@ All data stays on the local machine — nothing is sent to any third-party servi
 
 The QR generator script is at:
 ```
-.claude/skills/qr-code/scripts/qr_generator.py
+skills/qr-code/scripts/qr_generator.py
 ```
 
 Run it with `python3` (macOS/Linux) or `python` (Windows).
@@ -1353,7 +1671,7 @@ Run it with `python3` (macOS/Linux) or `python` (Windows).
 Save the QR code as a PNG image file:
 
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/qr_output.png "https://example.com"
+python3 skills/qr-code/scripts/qr_generator.py --png /tmp/qr_output.png "https://example.com"
 ```
 
 ### Options
@@ -1379,12 +1697,12 @@ python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/qr_output.png 
 
 Generate QR for a URL:
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/link_qr.png --open "https://meta.com"
+python3 skills/qr-code/scripts/qr_generator.py --png /tmp/link_qr.png --open "https://meta.com"
 ```
 
 Generate QR for plain text:
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png /tmp/message_qr.png --open "Thank god it's Friday!"
+python3 skills/qr-code/scripts/qr_generator.py --png /tmp/message_qr.png --open "Thank god it's Friday!"
 ```
 
 ## Publishing and hosting
@@ -1555,7 +1873,7 @@ fb-viewapp://web_app_deep_link?appName=my-glasses-app&appUrl=https%3A%2F%2Fmy-gl
 Use the `/qr-code` skill to generate the QR code:
 
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
 ```
 
 The PNG is saved to the app directory. If your environment supports rendering images inline (e.g. Claude Code's Read tool), display the QR code directly. Otherwise, provide the file path and tell the user to open it and scan from their phone.
@@ -1589,7 +1907,7 @@ URL=$(vercel --prod)
 vercel alias set "$URL" <project-name>.vercel.app
 
 # Regenerate QR code
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-publish.png "fb-viewapp://web_app_deep_link?appName=<app-name>&appUrl=<url-encoded-prod-url>"
 ```
 
 The stable URL automatically serves the latest version. No `git push` needed — Vercel receives the files directly.

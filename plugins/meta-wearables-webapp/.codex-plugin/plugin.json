@@ -1,6 +1,6 @@
 {
   "name": "meta-wearables-webapp",
-  "version": "125.0.0",
+  "version": "127.0.0",
   "description": "Skills for building Meta Display Glasses webapps",
   "author": {
     "name": "Meta Wearables"

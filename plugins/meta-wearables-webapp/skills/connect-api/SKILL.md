@@ -11,10 +11,8 @@ argument-hint: "[api-name-or-url]"
 
 Before generating or modifying any code, read both:
 
-- `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
-
-In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+- `../../references/display-guidelines.md`
+- `../../references/performance-guidelines.md`
 
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
 

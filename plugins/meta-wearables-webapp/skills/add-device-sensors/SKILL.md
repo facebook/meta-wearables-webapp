@@ -12,10 +12,8 @@ argument-hint: "[sensor-type: motion|orientation|geolocation]"
 
 Before generating or modifying any code, read both:
 
-- `${CLAUDE_PLUGIN_ROOT}/references/display-guidelines.md`
-- `${CLAUDE_PLUGIN_ROOT}/references/performance-guidelines.md`
-
-In copied `.claude` installs, read `.claude/references/display-guidelines.md` and `.claude/references/performance-guidelines.md` instead.
+- `../../references/display-guidelines.md`
+- `../../references/performance-guidelines.md`
 
 These define the non-negotiable display physics, input model, and performance budgets for Meta Display Glasses webapps. Do not skip — generated UI that ignores these will fail on-device.
 
@@ -28,6 +26,10 @@ Add IMU and GPS sensor integration to an existing webapp using standard Web APIs
 The glasses expose sensor data through two API families:
 - **DeviceMotionEvent / DeviceOrientationEvent** — IMU data (accelerometer, gyroscope, compass heading, tilt)
 - **navigator.geolocation** — GPS location from the paired companion phone
+
+## Permissions: wait for a user action
+
+Request permission and start sensor/location updates **only** from an explicit user action (a Start/Enable button) — never on load, `init()`, or screen entry (`requestPermission()` only resolves inside a user gesture). If permission isn't granted, show a message and stop: don't add listeners, start a watch, or auto-retry.
 
 ## Prerequisites
 
@@ -435,6 +437,7 @@ window.addEventListener('deviceorientation', function(e) {
 - [ ] Geolocation returns coordinates (may take several seconds on first call)
 - [ ] Sensors stop when leaving the screen
 - [ ] `clearWatch` is called when location watch is no longer needed
+- [ ] Permission/updates start only from a user action, and a denied permission stops the flow (no listeners, no watch, no retry)
 
 ## Related Skills
 

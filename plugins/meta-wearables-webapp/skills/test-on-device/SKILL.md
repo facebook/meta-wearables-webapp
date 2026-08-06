@@ -167,7 +167,7 @@ fb-viewapp://web_app_deep_link?appName=stage-my-glasses-app&appUrl=https%3A%2F%2
 Use the `/qr-code` skill to generate the QR code:
 
 ```bash
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
 ```
 
 The PNG is saved to the app directory. If your environment supports rendering images inline (e.g. Claude Code's Read tool), display the QR code directly. Otherwise, provide the file path and tell the user to open it and scan from their phone.
@@ -212,7 +212,7 @@ echo '{"ssoProtection":null}' | vercel api "/v9/projects/$PROJECT_ID" -X PATCH -
 vercel alias set "$URL" stage-<project-name>.vercel.app
 
 # Regenerate QR code
-python3 .claude/skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
+python3 skills/qr-code/scripts/qr_generator.py --png <app-dir>/qr-test-on-device.png "fb-viewapp://web_app_deep_link?appName=stage-<app-name>&appUrl=<url-encoded-stage-url>"
 ```
 
 After each deploy, show the QR code and setup instructions (following Steps 2-3).
