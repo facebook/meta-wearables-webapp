@@ -3,8 +3,8 @@
   "description": "AI-assisted development toolkit for building webapps on Meta Display Glasses — D-pad navigation, 600x600 dark-theme UI, sensor integration, and Vercel deploy workflows.",
   "version": "127.0.0",
   "author": { "name": "Meta" },
-  "homepage": "https://github.com/facebookincubator/meta-wearables-webapp",
-  "repository": "https://github.com/facebookincubator/meta-wearables-webapp",
+  "homepage": "https://github.com/facebook/meta-wearables-webapp",
+  "repository": "https://github.com/facebook/meta-wearables-webapp",
   "license": "BSD-3-Clause",
   "keywords": ["meta", "display-glasses", "wearables", "webapp", "vercel"]
 }

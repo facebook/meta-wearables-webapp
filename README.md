@@ -28,7 +28,7 @@ If your AI tool supports MCP, configure this remote HTTP server and call `search
 
 ```bash
 # Add the marketplace (one-time)
-/plugin marketplace add https://github.com/facebookincubator/meta-wearables-webapp
+/plugin marketplace add https://github.com/facebook/meta-wearables-webapp
 
 # Install the plugin
 /plugin install meta-wearables-webapp@meta-wearables
@@ -41,7 +41,7 @@ If your AI tool supports MCP, configure this remote HTTP server and call `search
 
 ```bash
 # Add the marketplace (one-time, run in your terminal)
-codex plugin marketplace add https://github.com/facebookincubator/meta-wearables-webapp
+codex plugin marketplace add https://github.com/facebook/meta-wearables-webapp
 ```
 
 Start Codex, and type `/plugins` → tab to **[Meta Wearables]** → install.
@@ -57,7 +57,7 @@ Then inside Codex: go to `/plugins` — if a newer version is available, select 
 
 ```bash
 # Clone this repo and Install for your preferred tool
-git clone https://github.com/facebookincubator/meta-wearables-webapp.git
+git clone https://github.com/facebook/meta-wearables-webapp.git
 cd meta-wearables-webapp
 ./install-skills.sh claude    # Claude Code
 ./install-skills.sh cursor    # Cursor
@@ -65,7 +65,7 @@ cd meta-wearables-webapp
 ./install-skills.sh all       # All tools + AGENTS.md
 
 # Or remote install (no clone needed)
-curl -sL https://raw.githubusercontent.com/facebookincubator/meta-wearables-webapp/main/install-skills.sh | bash
+curl -sL https://raw.githubusercontent.com/facebook/meta-wearables-webapp/main/install-skills.sh | bash
 ```
 
 ### 2. Build a Web App
@@ -134,11 +134,11 @@ Use the plugin's publish skill to generate a QR code. Scan it with your phone to
 
 ## Display Simulator Chrome Extension
 
-The **Meta Ray-Ban Display Web App Simulator** is a Chrome extension that recreates the 600×600 display surface of Meta Ray-Ban Display glasses in your browser — additive blending, environment backgrounds, D-pad input, display tuning, and recording — so you can preview and QA your web app without the hardware.
+The **Meta Ray-Ban Display Simulator** is a Chrome extension that recreates the 600×600 display surface of Meta Ray-Ban Display glasses in your browser — additive blending, environment backgrounds, D-pad input, display tuning, and recording — so you can preview and QA your web app without the hardware.
 
 ### Install
 
-1. Install the [Meta Ray-Ban Display Web App Simulator](https://chromewebstore.google.com/detail/jpjlmmodokemlepklkdbimceggpbjcll) from the Chrome Web Store.
+1. Install the [Meta Ray-Ban Display Simulator](https://chromewebstore.google.com/detail/jpjlmmodokemlepklkdbimceggpbjcll) from the Chrome Web Store.
 2. Navigate to your web app and click the extension icon to toggle the simulator on.
 
 ### Features

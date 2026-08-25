@@ -17,7 +17,7 @@
 
 set -euo pipefail
 
-REPO="facebookincubator/meta-wearables-webapp"
+REPO="facebook/meta-wearables-webapp"
 BRANCH="main"
 ARCHIVE_URL="https://github.com/${REPO}/archive/refs/heads/${BRANCH}.tar.gz"
 ARCHIVE_DIR="meta-wearables-webapp-${BRANCH}"
