@@ -30,7 +30,7 @@ All webapps target the Meta Display Glasses — a 600x600dp additive waveguide d
 - Keep navigation shallow — 3 steps or fewer to any action.
 
 ### Performance
-- **Targets:** <3s load, <500KB JS gzipped, 60fps, <128MB memory, <10 network requests.
+- **Targets:** <3s load, <500KB JS gzipped, 30fps, <128MB memory, <10 network requests.
 - **Code:** Vanilla JS or lightweight frameworks. No continuous intervals when idle. CSS transitions over JS animations.
 - **Assets:** Unicode/inline PNGs for icons. No external fonts. Inline assets <2KB as data URIs.
 - **Offline:** Cache with Service Worker. Show UI immediately. Handle fetch failures gracefully.
