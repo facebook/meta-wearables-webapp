@@ -1,0 +1,17 @@
+{
+  "name": "meta-wearables-webapp-game",
+  "version": "1.0.0",
+  "description": "Skills for building Meta Display Glasses webapp games (Vite + TypeScript + Three.js)",
+  "author": {
+    "name": "Meta Wearables"
+  },
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Meta Wearables Webapp Game",
+    "shortDescription": "Build 2D and 3D games for Meta Display Glasses",
+    "longDescription": "Skills for scaffolding, iterating on, validating, and shipping real-time games for Meta display glasses. Companion to the meta-wearables-webapp plugin.",
+    "developerName": "Meta Wearables",
+    "category": "Coding",
+    "capabilities": ["Read", "Write"]
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "meta-wearables-webapp-game",
+  "description": "AI-assisted toolkit for building 2D and 3D games on Meta Display Glasses — a renderer-, input-, and audio-agnostic game architecture on Vite + TypeScript + Three.js, within the 600x600 additive-display and pinch/D-pad constraints.",
+  "version": "1.0.0",
+  "author": { "name": "Meta" },
+  "homepage": "https://github.com/facebook/meta-wearables-webapp",
+  "repository": "https://github.com/facebook/meta-wearables-webapp",
+  "license": "BSD-3-Clause",
+  "keywords": ["meta", "display-glasses", "wearables", "webapp", "game", "threejs"]
+}
