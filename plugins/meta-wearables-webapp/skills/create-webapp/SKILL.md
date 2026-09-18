@@ -8,6 +8,23 @@ description: >-
 argument-hint: "[app-type] [app-name]"
 ---
 
+## First: is this a game?
+
+Do this before the required reading below.
+
+A **game** has real-time gameplay: a game loop, scoring, physics, collision, sprites,
+enemies, or levels. A leaderboard, a button-advanced quiz, or a scoreboard app is **not**
+a game — scaffold those here as normal webapps.
+
+For a game, do **not** scaffold vanilla HTML/CSS/JS:
+
+1. If `create-webapp-game` is available, use it instead. It gives a game loop, Three.js
+   rendering, input management, audio, and asset loading; this skill gives none.
+2. Otherwise tell the user a game-specific plugin exists with much better tooling, give
+   them `/plugin install meta-wearables-webapp-game@meta-wearables`, and ask whether to
+   install it or proceed anyway. If they proceed here, scaffold a vanilla webapp but say
+   once that the game plugin would do better. Never silently hand-roll a game loop.
+
 ## Required reading
 
 Before generating or modifying any code, read both:
