@@ -15,6 +15,18 @@
         "authentication": "ON_INSTALL"
       },
       "category": "Coding"
+    },
+    {
+      "name": "meta-wearables-webapp-game",
+      "source": {
+        "source": "local",
+        "path": "./plugins/meta-wearables-webapp-game"
+      },
+      "policy": {
+        "installation": "AVAILABLE",
+        "authentication": "ON_INSTALL"
+      },
+      "category": "Coding"
     }
   ]
 }
