@@ -181,7 +181,10 @@ async function handleGet(req, res, token) {
   const url = parsedUrl(req);
   const since = Number(url.searchParams.get('since') ?? 0);
   const store = getStore();
-  const { entries, cursor } = await store.read(Number.isFinite(since) ? since : 0, MAX_READ);
+  // Clamped, not just checked for finiteness: every backend selects on `entry.id > sinceId`, so a
+  // negative cursor is not an early one — it re-reads the whole retained window on every poll.
+  const from = Number.isFinite(since) ? Math.max(0, since) : 0;
+  const { entries, cursor } = await store.read(from, MAX_READ);
 
   sendJson(res, 200, {
     entries,

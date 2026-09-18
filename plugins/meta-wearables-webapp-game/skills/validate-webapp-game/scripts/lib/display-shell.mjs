@@ -32,8 +32,8 @@
  * This file exists twice, byte-identical: the copy the `validate-webapp-game` skill runs
  * (`skills/validate-webapp-game/scripts/lib/`) and the copy shipped in the scaffold so a
  * game can run `npm run validate` standalone (`skills/create-webapp-game/templates/
- * scripts/lib/`). **Fix a bug here and copy the file to the other location** —
- * `tests/scripts/copiesInSync.test.mjs` fails the build on drift.
+ * scripts/lib/`). **Fix a bug here and copy the file to the other location** — the two are
+ * checked for drift.
  *
  * Known limitation: CSS parsing is regex/line based. A relative font size (`rem`/`em`/`%`) can't
  * be resolved statically, so it is returned as `ambiguous` for a human or LLM to adjudicate
@@ -61,7 +61,7 @@ const TEMPLATE_DESCRIPTION = 'A webapp game for Meta Display Glasses.';
  * The three parts of the `<meta name="generator">` attribution marker. The skill name is the
  * **public** one on purpose — the marker ships inside released games, so it never carries the
  * internal codename. Kept equal to the constants in `stamp-version.mjs`, which writes the tag;
- * `tests/scripts/stampVersion.test.mjs` fails on drift.
+ * the two are checked for drift.
  *
  * The version is only checked for shape, never against the current plugin version: a game
  * legitimately lags behind until it re-syncs its framework.

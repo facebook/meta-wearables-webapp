@@ -41,9 +41,8 @@ const PLUGIN_JSON = path.resolve(HERE, '../../../.claude-plugin/plugin.json');
  * The **public** name of the scaffolding skill, deliberately. This marker ships inside every
  * released game, so it must read the same whichever release of this plugin scaffolded the game,
  * and must never carry a Meta-only codename. Writing the published name directly is what makes
- * that true; a release cut renames the skill directory to match, and
- * `tests/scripts/stampVersion.test.mjs` asserts the two still agree. Do not "correct" this to the
- * directory name it currently sits under.
+ * that true; a release cut renames the skill directory to match, and the two are asserted to
+ * still agree. Do not "correct" this to the directory name it currently sits under.
  */
 export const GENERATOR_SKILL = 'create-webapp-game';
 

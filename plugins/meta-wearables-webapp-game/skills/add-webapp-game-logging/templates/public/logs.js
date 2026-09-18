@@ -157,7 +157,22 @@
       return;
     }
 
-    const body = await response.json();
+    // A 200 carrying something other than JSON — a proxy's HTML error page, a truncated body —
+    // would otherwise reject here, and `poll` is driven by a bare `setInterval`, so that becomes
+    // an unhandled rejection on every tick rather than a visible status.
+    let body;
+    try {
+      body = await response.json();
+    } catch {
+      setStatus('bad response — retrying');
+      return;
+    }
+    // Parsing is not enough: `null` and a bare string are both valid JSON, and every read below
+    // would throw on them — outside the `try`, so back to an unhandled rejection per tick.
+    if (body === null || typeof body !== 'object') {
+      setStatus('bad response — retrying');
+      return;
+    }
     cursor = body.cursor ?? cursor;
 
     if (body.store?.ephemeral) {

@@ -274,8 +274,7 @@ Add each new check the same way, cheapest tool first:
    (see `scripts/list-target-files.mjs`, which prints one path per line) and spawn one Haiku
    subagent per item (like Step 3) — never one big subagent that re-reads the whole project.
 
-Both copies of every script must stay byte-identical (see the plugin's `CLAUDE.md`), and each
-needs a unit test.
+Both copies of every script must stay byte-identical, and each needs a unit test.
 
 ## Troubleshooting
 

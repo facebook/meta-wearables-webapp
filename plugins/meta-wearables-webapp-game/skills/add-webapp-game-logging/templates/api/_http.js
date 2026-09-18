@@ -45,7 +45,7 @@ export function envNumber(name, fallback) {
 /** Reject bodies larger than this outright — a log batch is small, anything huge is abuse. */
 export const MAX_BODY_BYTES = envNumber('LOG_MAX_BODY_BYTES', 256 * 1024);
 
-const COOKIE_NAME = 'hnlog';
+const COOKIE_NAME = 'webapp-game-log';
 
 /**
  * Fixed delay charged for every rejected credential — enough to make scripted guessing impractical
@@ -135,7 +135,7 @@ export function safeEqual(a, b) {
 
 /** The cookie value proving portal access: a hash of the token, never the token itself. */
 export function cookieValueFor(token) {
-  return crypto.createHash('sha256').update(`hnlog:${token}`).digest('hex');
+  return crypto.createHash('sha256').update(`webapp-game-log:${token}`).digest('hex');
 }
 
 export function parsedUrl(req) {
@@ -153,9 +153,10 @@ export function readCookie(req, name = COOKIE_NAME) {
       try {
         return decodeURIComponent(part.slice(index + 1).trim());
       } catch {
-        // Malformed percent-encoding (`hnlog=%ZZ`) throws URIError. An unauthenticated caller must
-        // get the 401 that a missing cookie gets, not a 500 from an uncaught throw. Keep scanning
-        // rather than returning: a later, well-formed cookie of the same name is still usable.
+        // Malformed percent-encoding (`webapp-game-log=%ZZ`) throws URIError. An unauthenticated
+        // caller must get the 401 that a missing cookie gets, not a 500 from an uncaught throw.
+        // Keep scanning rather than returning: a later, well-formed cookie of the same name is
+        // still usable.
       }
     }
   }

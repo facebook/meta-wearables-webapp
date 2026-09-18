@@ -51,7 +51,15 @@ function tokenFromEnvFile(project) {
   const file = path.join(project, '.env');
   if (!fs.existsSync(file)) return undefined;
   const match = fs.readFileSync(file, 'utf8').match(/^LOG_TOKEN=(.*)$/m);
-  return match ? match[1].trim() : undefined;
+  if (!match) return undefined;
+  // Strip matched surrounding quotes, as `loadDotEnvInto` in `vite-log-api.mjs` does when it reads
+  // the same file. Without this, a hand-written `LOG_TOKEN="abc"` makes the server authenticate
+  // with `abc` and the smoke test send `"abc"` — a reported failure against a working deployment.
+  const value = match[1].trim();
+  const quote = value[0];
+  return (quote === '"' || quote === "'") && value.length > 1 && value.endsWith(quote)
+    ? value.slice(1, -1)
+    : value;
 }
 
 async function startDevServer(project, port, env) {

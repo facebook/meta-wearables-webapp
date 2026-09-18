@@ -162,8 +162,13 @@ export function logApiPlugin() {
 
         try {
           // Imported per request so edits to the handlers are picked up without restarting the
-          // dev server. The cache-busting query is the standard ESM re-import trick.
-          const moduleUrl = `${pathToFileURL(path.resolve(process.cwd(), file)).href}?t=${Date.now()}`;
+          // dev server. The key is the handler's mtime rather than the wall clock: Node's ESM
+          // loader never evicts a module URL, and the portal polls this route every 1.5s while
+          // open, so a unique URL per request would grow the loader cache without bound for the
+          // life of the dev server. Keyed on mtime, an idle poll re-uses the loaded module and
+          // only an actual edit loads a new one.
+          const resolved = path.resolve(process.cwd(), file);
+          const moduleUrl = `${pathToFileURL(resolved).href}?t=${fs.statSync(resolved).mtimeMs}`;
           const { default: handler } = await import(moduleUrl);
           await handler(req, res);
         } catch (error) {
