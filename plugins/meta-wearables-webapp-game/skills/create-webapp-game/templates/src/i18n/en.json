@@ -1,0 +1,12 @@
+{
+  "title": "REPLACE_WITH_GAME_TITLE",
+  "hint": "▲▼◀▶ move · tap to start",
+  "loading": "Loading…",
+  "loadError": "Couldn't load. Please reload.",
+  "logConsentTitle": "Debug logging",
+  "logConsentBody": "This build was opened with debug logging on. Activity in this session — including anything the game logs — will be sent to {{host}} and readable by whoever runs it.",
+  "logConsentAccept": "Enable debug logging",
+  "logConsentDecline": "Play without logging",
+  "logConsentHint": "▲▼ choose · tap to confirm",
+  "logConsentBadge": "LOGGING"
+}

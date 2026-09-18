@@ -1,0 +1,25 @@
+{
+  "rewrites": [
+    { "source": "/((?!api(/|$)).*)", "destination": "/index.html" }
+  ],
+  "headers": [
+    {
+      "source": "/_vite/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
+      ]
+    },
+    {
+      "source": "/api/(.*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-store" }
+      ]
+    },
+    {
+      "source": "/((?!_vite/|api/).*)",
+      "headers": [
+        { "key": "Cache-Control", "value": "no-cache" }
+      ]
+    }
+  ]
+}

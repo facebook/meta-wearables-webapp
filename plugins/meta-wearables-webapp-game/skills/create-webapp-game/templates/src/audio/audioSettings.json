@@ -1,0 +1,128 @@
+{
+  "_comment": "The game's sound catalog — EXAMPLE content, replace with your own. This file is the source of truth for audio and is meant to be edited by a sound designer without touching TypeScript. Every clip here is SYNTHESIZED (an inline oscillator/noise stack), so the starter ships no audio files and needs no banks: each example shows a different sound-design technique. To add a real recorded sound, put the file in public/assets/sounds/, add an { type: 'audio', bank: '…' } entry to the preload manifest in main.ts, and name the file in an event's clips. Keep the event names in step with src/audio/soundIds.ts — audioSettings.test.ts fails if they drift. Tune the SOUND here; tune the MIX and spatialization in AUDIO (src/config/gameplayConstants.ts). See docs/audio.md.",
+
+  "global": {
+    "globalVoiceLimit": 16,
+    "defaultCooldown": 30,
+    "soundsBasePath": "assets/sounds/"
+  },
+
+  "voiceGroups": [
+    {
+      "id": "ui",
+      "description": "UI blips share two voices, so a flurry of taps cannot flood the mix",
+      "voiceLimit": 2,
+      "voiceLimitStrategy": "killOldest"
+    }
+  ],
+
+  "events": [
+    {
+      "name": "select",
+      "_comment": "UI confirm: a short upward square blip. Single square layer + pitch bend + tight envelope.",
+      "voiceGroup": "ui",
+      "clips": [
+        {
+          "synth": {
+            "gain": 0.4,
+            "layers": [
+              { "type": "square", "startFreq": 660, "endFreq": 880, "decay": 0.08, "peak": 0.6 }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "laser",
+      "_comment": "Laser 'pew': a fast high-to-low square bend — the downward sweep reads as a shot.",
+      "voiceLimit": 4,
+      "clips": [
+        {
+          "synth": {
+            "gain": 0.4,
+            "layers": [
+              { "type": "square", "startFreq": 900, "endFreq": 420, "decay": 0.08, "peak": 0.5 }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "explosion",
+      "_comment": "A bright square flash, a white-noise body, and a low square rumble — multi-layer + noise + low frequencies stacked into one boom.",
+      "voiceLimit": 2,
+      "clips": [
+        {
+          "synth": {
+            "gain": 0.7,
+            "layers": [
+              { "type": "square", "startFreq": 800, "endFreq": 90, "decay": 0.12, "peak": 0.6 },
+              { "type": "noise", "decay": 0.6, "peak": 0.9 },
+              { "type": "square", "startFreq": 130, "endFreq": 30, "decay": 0.6, "peak": 0.6 }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "pickup",
+      "_comment": "A warm major arpeggio — three triangle notes offset by `delay`. Sequenced notes in one clip.",
+      "clips": [
+        {
+          "synth": {
+            "gain": 0.45,
+            "layers": [
+              { "type": "triangle", "freq": 523.25, "decay": 0.1, "attack": 0.004, "delay": 0 },
+              { "type": "triangle", "freq": 659.25, "decay": 0.1, "attack": 0.004, "delay": 0.07 },
+              { "type": "triangle", "freq": 783.99, "decay": 0.14, "attack": 0.004, "delay": 0.14 }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "shield",
+      "_comment": "Metallic 'ting': two triangles at the same pitch, one detuned, for a shimmer.",
+      "clips": [
+        {
+          "synth": {
+            "gain": 0.4,
+            "layers": [
+              { "type": "triangle", "startFreq": 1200, "endFreq": 1600, "decay": 0.22, "peak": 0.6 },
+              { "type": "triangle", "startFreq": 1200, "endFreq": 1600, "decay": 0.22, "peak": 0.4, "detune": 14 }
+            ]
+          }
+        }
+      ]
+    },
+
+    {
+      "name": "hit",
+      "_comment": "Two slightly different sawtooth ticks, picked at random but never the same twice running, so repeats do not machine-gun. Several clips in one event ARE the variation pool.",
+      "clipSelect": "randomNonRepeating",
+      "voiceLimit": 3,
+      "clips": [
+        {
+          "synth": {
+            "gain": 0.4,
+            "layers": [
+              { "type": "sawtooth", "startFreq": 620, "endFreq": 400, "decay": 0.06, "peak": 0.5 }
+            ]
+          }
+        },
+        {
+          "synth": {
+            "gain": 0.4,
+            "layers": [
+              { "type": "sawtooth", "startFreq": 680, "endFreq": 360, "decay": 0.06, "peak": 0.5 }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}

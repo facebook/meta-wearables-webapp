@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <!-- Disable caching. The glasses browser aggressively caches pages opened via QR
+         code and offers no user-facing "force refresh", so a stale build can get stuck
+         on-device. These directives force a fresh fetch on every load. -->
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+    <meta http-equiv="Pragma" content="no-cache" />
+    <meta http-equiv="Expires" content="0" />
+    <meta name="viewport" content="width=600, height=600, initial-scale=1.0" />
+    <!-- Replace with a brief, game-specific description of what this game is. -->
+    <meta name="description" content="A webapp game for Meta Display Glasses." />
+    <!-- Identifies the page as a Meta Display Glasses (MRBD) webapp so the device routes
+         D-pad / EMG input to it. Keep content="yes" verbatim. -->
+    <meta name="mrbd-web-app-capable" content="yes" />
+    <!-- Records the scaffolding skill and its version, so a released game says what built it.
+         Stamped by the create skill and re-stamped on every framework update — don't hand-edit
+         it, and don't remove it (`npm run validate` checks it). -->
+    <meta
+      name="generator"
+      content="create-webapp-game REPLACE_WITH_PLUGIN_VERSION (https://github.com/facebook/meta-wearables-webapp)"
+    />
+    <!-- Localized text is populated from src/i18n/ at boot. data-i18n keys map to en.json;
+         see the plugin's docs/localization.md. -->
+    <title data-i18n="title">REPLACE_WITH_GAME_TITLE</title>
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body>
+    <!-- The 600x600 stage. On the device the viewport IS 600x600; on desktop we center a
+         fixed 600x600 stage so the framing matches the glasses. Everything (canvas + DOM
+         HUD overlay) lives inside #game-root so nothing escapes the 600x600 bounds. -->
+    <div id="game-root">
+      <!-- Three.js renders the game world (2D or 3D) into this WebGL canvas. -->
+      <canvas id="game-canvas" width="600" height="600"></canvas>
+
+      <!-- DOM HUD overlay above the canvas. Text/menus go here, NOT in WebGL.
+           See the plugin's threejs-vs-dom guidance. -->
+      <div id="hud">
+        <div id="hud-top">
+          <span id="score">0</span>
+        </div>
+        <!-- Text is filled from src/i18n/ via data-i18n keys; leave these empty. -->
+        <div id="title-screen">
+          <div class="title" data-i18n="title"></div>
+          <div class="hint" data-i18n="hint"></div>
+        </div>
+      </div>
+    </div>
+
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

@@ -1,0 +1,36 @@
+{
+  "name": "REPLACE_WITH_GAME_NAME",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && vite build",
+    "preview": "vite preview",
+    "test": "vitest run",
+    "test:game": "vitest run --exclude \"framework/**\"",
+    "test:framework": "vitest run --dir src/framework",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit",
+    "validate": "node scripts/validate-all.mjs .",
+    "package": "node scripts/package-single-file.mjs",
+    "ship": "npm run typecheck && npm run audio-sizes:check && npm test && npm run validate && vite build && npm run package",
+    "audio-sizes": "node scripts/audio-sizes.mjs .",
+    "audio-sizes:check": "node scripts/audio-sizes.mjs . --check"
+  },
+  "dependencies": {
+    "i18next": "^23.16.8",
+    "i18next-browser-languagedetector": "^8.0.2",
+    "three": "^0.184.0"
+  },
+  "devDependencies": {
+    "@types/node": "^25.9.3",
+    "@types/three": "^0.184.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.2",
+    "vitest": "^4.1.1"
+  }
+}
