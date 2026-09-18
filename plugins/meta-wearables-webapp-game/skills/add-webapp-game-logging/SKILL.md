@@ -124,7 +124,10 @@ It is idempotent, prints a JSON summary, and:
   plugin);
 - **merges** `vercel.json` rather than overwriting it: adds
   `{ "source": "/logs", "destination": "/logs.html" }` *before* the catch-all so `/logs` serves the
-  portal, and rewrites the catch-all source to `/((?!api(/|$)).*)` so it can never shadow a function;
+  portal, and migrates any negative-lookahead route pattern an older scaffold left behind to a
+  plain `/(.*)` — Vercel rejects lookaheads outright, so a project still carrying one cannot
+  deploy. The catch-all needs no `api/` carve-out: Vercel resolves Serverless Functions in the
+  filesystem step, ahead of `rewrites`;
 - registers the dev-server plugin in `vite.config.ts` (`logApiPlugin()`), which is what makes the
   whole feature testable on localhost before publishing — it serves the `api/` handlers and the
   portal at `/logs`, the same paths the deployment uses; loads `.env` into `process.env` so the

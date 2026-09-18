@@ -1,8 +1,10 @@
 {
-  "rewrites": [
-    { "source": "/((?!api(/|$)).*)", "destination": "/index.html" }
-  ],
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }],
   "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [{ "key": "Cache-Control", "value": "no-cache" }]
+    },
     {
       "source": "/_vite/(.*)",
       "headers": [
@@ -11,15 +13,7 @@
     },
     {
       "source": "/api/(.*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-store" }
-      ]
-    },
-    {
-      "source": "/((?!_vite/|api/).*)",
-      "headers": [
-        { "key": "Cache-Control", "value": "no-cache" }
-      ]
+      "headers": [{ "key": "Cache-Control", "value": "no-store" }]
     }
   ]
 }

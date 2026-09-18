@@ -55,29 +55,31 @@ const COPIES = [
 const GITIGNORE_ENTRIES = ['.env', '.logs/'];
 
 /**
- * A rewrite can only shadow `/api/*` if its pattern starts wildcarding at the root — `/(.*)`,
- * `/:path*`, `/*`. A scoped rewrite like `/help/(.*)` cannot reach `/api/...`, and warning about
- * it would send the user to edit a route that was never at risk.
+ * Vercel route patterns are path-to-regexp, which has no lookahead. A `source` containing one
+ * is rejected outright — `Error: Rewrite at index 0 has invalid 'source' pattern` — and the
+ * deploy fails before it builds, so any surviving occurrence is worth a warning.
  */
-const ROOT_WILDCARD_RE = /^\/[(:*]/;
+const LOOKAHEAD_RE = /\(\?!/;
 
 /**
- * The catch-all the scaffold ships, and the target every migratable catch-all is rewritten to.
- * Kept here so it cannot drift from `create-webapp-game/templates/vercel.json`.
+ * The catch-all the scaffold ships. Kept here so it cannot drift from
+ * `create-webapp-game/templates/vercel.json`.
  *
- * The alternation is `(/|$)`, not a bare `api/`: with only the trailing slash the bare path `/api`
- * passes the negative lookahead, `.*` swallows it, and the SPA shadows a function mounted at
- * exactly `/api`.
+ * It needs no `api/` carve-out: Vercel resolves the filesystem — static files, then Serverless
+ * Functions — before it consults `rewrites`, so `/api/*` reaches the function and only unmatched
+ * paths fall through to the SPA.
  */
-const API_SAFE_CATCH_ALL = '/((?!api(/|$)).*)';
+const CANONICAL_CATCH_ALL = '/(.*)';
 
 /**
- * The catch-alls this installer knows how to replace: the scaffold's plain SPA fallback, and the
- * output of an earlier version of this installer. The second one has to be listed, not skipped as
- * "already handled" — it excludes `api/` only, so it still shadows a function mounted at exactly
- * `/api`, which is the whole reason {@link API_SAFE_CATCH_ALL} spells the exclusion `api(/|$)`.
+ * Catch-alls written by earlier versions of this installer and of the scaffold, both of which
+ * carved `api/` out with a negative lookahead. They are not merely redundant — Vercel rejects
+ * the pattern, so a project still carrying one cannot deploy at all until it is migrated.
  */
-const MIGRATABLE_CATCH_ALLS = new Set(['/(.*)', '/((?!api/).*)']);
+const MIGRATABLE_CATCH_ALLS = new Set(['/((?!api/).*)', '/((?!api(/|$)).*)']);
+
+/** The `headers` counterpart, which excluded the two narrower cache tiers instead of `api/`. */
+const LEGACY_HEADER_CATCH_ALL = '/((?!_vite/|api/).*)';
 const IMPORT_LINE = "import { logApiPlugin } from './scripts/vite-log-api.mjs';";
 
 function fail(message) {
@@ -98,8 +100,9 @@ function parseArgs(argv) {
 }
 
 /**
- * Add the `/logs` rewrite ahead of the SPA catch-all, and stop the catch-all from shadowing
- * `api/` functions. Merges into whatever the project already has rather than overwriting.
+ * Add the `/logs` rewrite ahead of the SPA catch-all, and migrate any lookahead-bearing route
+ * pattern an older scaffold left behind. Merges into whatever the project already has rather
+ * than overwriting.
  *
  * This is the deployment half of the `/logs` path; `PAGE_ALIASES` in `templates/scripts/
  * vite-log-api.mjs` is the dev-server half. Change one, change the other.
@@ -108,24 +111,12 @@ function mergeVercelJson(file) {
   const config = fs.existsSync(file) ? JSON.parse(fs.readFileSync(file, 'utf8')) : {};
   const rewrites = Array.isArray(config.rewrites) ? config.rewrites : [];
 
-  const unrecognized = [];
   for (const rewrite of rewrites) {
     if (rewrite.destination !== '/index.html' || typeof rewrite.source !== 'string') {
       continue;
     }
-    if (rewrite.source === API_SAFE_CATCH_ALL) {
-      // Already canonical — an idempotent re-run. Nothing to rewrite and nothing to warn about.
-      continue;
-    }
     if (MIGRATABLE_CATCH_ALLS.has(rewrite.source)) {
-      rewrite.source = API_SAFE_CATCH_ALL;
-    } else if (ROOT_WILDCARD_RE.test(rewrite.source)) {
-      // A catch-all we don't recognize, so we can't safely rewrite it. Rewriting it blind could
-      // break a deliberate route; leaving it silent is worse, because it still shadows `/api/*`.
-      // Matched against the known forms above rather than a loose `includes('api')` test: a
-      // pattern like `/((?!rapid/).*)` carries those letters for an unrelated reason, and
-      // treating it as api-safe would suppress this warning while the shadowing remained.
-      unrecognized.push(rewrite.source);
+      rewrite.source = CANONICAL_CATCH_ALL;
     }
   }
   if (!rewrites.some((r) => r.destination === '/logs.html')) {
@@ -133,12 +124,34 @@ function mergeVercelJson(file) {
   }
 
   config.rewrites = rewrites;
+
+  // Header sources are the same path-to-regexp dialect and the same rejection, so a project
+  // whose headers still carry the old exclusion cannot deploy either. Only the exact pattern
+  // the scaffold used is migrated; anything else is reported rather than rewritten blind.
+  //
+  // Broadening the pattern also has to move the entry to the front. The old scaffold listed
+  // this rule last and relied on the lookahead to keep it off `_vite/` and `api/`; `/(.*)` has
+  // no such carve-out, and Vercel applies every matching entry with the later one winning for
+  // a repeated key. Left in place it would override the narrower tiers it used to exclude.
+  const headers = Array.isArray(config.headers) ? config.headers : [];
+  const broadened = headers.filter((header) => header.source === LEGACY_HEADER_CATCH_ALL);
+  for (const header of broadened) {
+    header.source = CANONICAL_CATCH_ALL;
+  }
+  if (broadened.length > 0) {
+    config.headers = [...broadened, ...headers.filter((header) => !broadened.includes(header))];
+  }
+
+  const stranded = [...rewrites, ...headers]
+    .map((entry) => entry.source)
+    .filter((source) => typeof source === 'string' && LOOKAHEAD_RE.test(source));
+
   fs.writeFileSync(file, `${JSON.stringify(config, null, 2)}\n`);
 
-  return unrecognized.length === 0
-    ? 'merged (/logs rewrite + api/ excluded from catch-all)'
-    : `merged (/logs rewrite); WARNING: unrecognized catch-all ${unrecognized.join(', ')} — ` +
-        'exclude api/ from it by hand or the deployed /api/* routes will serve index.html';
+  return stranded.length === 0
+    ? 'merged (/logs rewrite)'
+    : `merged (/logs rewrite); WARNING: unrecognized lookahead pattern ${stranded.join(', ')} — ` +
+        'Vercel rejects these, so rewrite them by hand or the deploy will fail';
 }
 
 /** Register the dev-server plugin, whether or not the config already has a `plugins` array. */

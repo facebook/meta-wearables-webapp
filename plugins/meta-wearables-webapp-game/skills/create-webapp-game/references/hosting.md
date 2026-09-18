@@ -21,6 +21,13 @@ This is a **Vite build-tool app**, so deploy it differently from the vanilla
   plus the verbatim `public/` assets) is `no-cache` — stored but revalidated every load, so a
   republish lands immediately. A blanket `no-store` re-downloads the whole payload on every
   launch over the glasses' constrained link, and buys nothing the hashes don't already give.
+  The broad `/(.*)` rule is listed **first** and the two narrow ones after it, because Vercel
+  applies every matching `headers` entry and the later one wins for a repeated key.
+- **Never use a negative lookahead in a route `source`.** Vercel rejects the whole config —
+  `Error: Rewrite at index 0 has invalid 'source' pattern`, and the deploy fails before it
+  builds. Route patterns are path-to-regexp, not arbitrary regex: `:param`, `:param*` and
+  `(.*)` are available; `(?!...)` is not. Any exclusion has to come from rule ordering or
+  from Vercel's routing order, never from a lookahead.
 - **Don't re-point the immutable tier at `/assets/`, and don't drop `build.assetsDir` from
   `vite.config.ts`.** They are one mechanism: `public/` is copied into the build root, so with
   Vite's default `assetsDir` the hashed output and the verbatim `public/assets/...` files share a
@@ -30,11 +37,12 @@ This is a **Vite build-tool app**, so deploy it differently from the vanilla
   account-level steps (`vercel login`, disabling Deployment Protection, aliasing to a stable
   URL). **Skip their `server.js` / `start`-script hosting setup** — it does not apply to this
   build-tool app and is what causes the 404.
-- Serverless functions under **`api/`** are the one sanctioned server-side addition. The
-  scaffold's SPA catch-all is `/((?!api(/|$)).*)`, which excludes them by construction, so an
-  `/api/<name>` request reaches the function rather than the SPA. That is how the opt-in
-  remote-logging backend works — see `/add-webapp-game-logging`. It is still never a `server.js` or
-  a `start` script.
+- Serverless functions under **`api/`** are the one sanctioned server-side addition, and the
+  SPA catch-all does not shadow them. Vercel resolves the filesystem — static files, then
+  Serverless Functions — *before* it consults `rewrites`, so `/api/<name>` reaches the
+  function and only unmatched paths fall through to `/index.html`. The catch-all is therefore
+  a plain `/(.*)`; it needs no carve-out. That is how the opt-in remote-logging backend works
+  — see `/add-webapp-game-logging`. It is still never a `server.js` or a `start` script.
 
 ## Reading logs from the glasses
 
