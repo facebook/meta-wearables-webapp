@@ -63,11 +63,16 @@ async function startDevServer(project, port, env) {
     if (value === undefined) delete childEnv[key];
   }
 
-  const child = spawn('npm', ['run', 'dev', '--', '--port', String(port), '--strictPort'], {
-    cwd: project,
-    env: childEnv,
-    stdio: 'ignore',
-  });
+  // On Windows npm is `npm.cmd`, which Node refuses to exec directly, so it has to go through a
+  // shell — as one pre-joined string, since `shell: true` with an args array is DEP0190-deprecated
+  // and concatenated unescaped regardless. Every token here is a literal or a number.
+  // Caveat, Windows only: `child` is then cmd.exe, which does not exec-replace itself, so the kill
+  // in `stopDevServer` may leave Vite holding the port. POSIX is unaffected — `shell` stays false.
+  const devArgs = ['run', 'dev', '--', '--port', String(port), '--strictPort'];
+  const child =
+    process.platform === 'win32'
+      ? spawn(['npm', ...devArgs].join(' '), { cwd: project, env: childEnv, stdio: 'ignore', shell: true })
+      : spawn('npm', devArgs, { cwd: project, env: childEnv, stdio: 'ignore' });
 
   const base = `http://localhost:${port}`;
   for (let i = 0; i < 100; i += 1) {

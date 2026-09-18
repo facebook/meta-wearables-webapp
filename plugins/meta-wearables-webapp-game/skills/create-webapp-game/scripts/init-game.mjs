@@ -42,7 +42,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { spawnSync } from 'node:child_process';
+import { runNpm } from './run-npm.mjs';
 import { stampVersion } from './stamp-version.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
@@ -228,6 +228,8 @@ function main() {
   // until it times out. The template ships a package-lock.json, so try the offline path first —
   // with a warm ~/.npm/_cacache it completes in seconds.
   let install = 'skipped';
+  let ranNpm = false;
+  let spawnFailure = null;
   if (!args.skipInstall) {
     const attempts = [
       { label: 'npm ci --offline', args: ['ci', '--offline', '--no-audit', '--no-fund'] },
@@ -236,15 +238,25 @@ function main() {
     ];
     install = 'failed';
     for (const attempt of attempts) {
-      const result = spawnSync('npm', attempt.args, {
+      const result = runNpm(attempt.args, {
         cwd: target,
         stdio: 'ignore',
         timeout: 300_000,
       });
+      if (result.status !== null) ranNpm = true;
       if (result.status === 0) {
         install = attempt.label;
         break;
       }
+      // `status: null` with an `error` means npm never ran at all — a broken PATH, or a Node that
+      // cannot exec it. That is a different problem from a network-less sandbox, and reporting it
+      // as one sends the reader off to fix the wrong thing.
+      //
+      // Recorded, never cleared: evidence that npm could not be executed is not withdrawn by a
+      // later attempt failing some other way. A timeout is not that evidence — a hung install is
+      // the network-less sandbox itself — so it neither sets nor clears this. Whether some attempt
+      // did get npm to run is `ranNpm`'s job, and that is what gates the message below.
+      if (result.error && result.error.code !== 'ETIMEDOUT') spawnFailure = result.error.message;
     }
   }
 
@@ -256,7 +268,7 @@ function main() {
   const canGate = !args.skipGate && !args.skipInstall && install !== 'failed' && install !== 'skipped';
   if (canGate) {
     for (const step of ['typecheck', 'test', 'validate']) {
-      const result = spawnSync('npm', ['run', '--silent', step], {
+      const result = runNpm(['run', '--silent', step], {
         cwd: target,
         encoding: 'utf8',
         timeout: 600_000,
@@ -289,8 +301,11 @@ function main() {
 
   if (install === 'failed') {
     console.error(
-      'init-game: dependency install failed. The Bash sandbox blocks network access; run ' +
-        '`npm ci --offline` (or `npm install` outside the sandbox) in the project directory.',
+      spawnFailure && !ranNpm
+        ? `init-game: could not run npm at all (${spawnFailure}). This is not a network problem — ` +
+            'npm is missing from PATH, or Node cannot execute it. Fix npm, then re-run.'
+        : 'init-game: dependency install failed. The Bash sandbox blocks network access; run ' +
+            '`npm ci --offline` (or `npm install` outside the sandbox) in the project directory.',
     );
     process.exit(1);
   }

@@ -14,7 +14,7 @@
       "name": "meta-wearables-webapp-game",
       "source": "./plugins/meta-wearables-webapp-game",
       "description": "Skills for building Meta Display Glasses webapp games (Vite + TypeScript + Three.js)",
-      "version": "1.0.0"
+      "version": "1.0.1"
     }
   ]
 }
