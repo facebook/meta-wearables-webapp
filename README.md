@@ -33,6 +33,9 @@ If your AI tool supports MCP, configure this remote HTTP server and call `search
 # Install the plugin
 /plugin install meta-wearables-webapp@meta-wearables
 
+# Building a game? Also install the companion game plugin
+/plugin install meta-wearables-webapp-game@meta-wearables
+
 # Update plugin
 /plugin marketplace update meta-wearables && /plugin update meta-wearables-webapp@meta-wearables
 ```
@@ -75,6 +78,11 @@ Open your project in an AI-assisted editor and describe what you want:
 > "Create a weather app that shows the 5-day forecast with D-pad navigation"
 
 The AI will scaffold `index.html`, `styles.css`, and `app.js` following the display glasses design system.
+
+**Building a game?** Real-time gameplay — a game loop, scoring, physics, collision, sprites,
+enemies, or levels — belongs in the companion `meta-wearables-webapp-game` plugin, which scaffolds
+a Vite + TypeScript + Three.js project instead. A leaderboard, a scoreboard, or a button-advanced
+quiz is a normal web app; build those here.
 
 ### 3. Test in Browser
 
@@ -132,6 +140,26 @@ Use the plugin's publish skill to generate a QR code. Scan it with your phone to
 | `qr-code` | Generate add-to-glasses QR codes |
 | `passcode-for-testing` | Add a lightweight test passcode gate |
 
+## Game Skills (companion plugin)
+
+Real-time games need a game loop, a renderer, input management, audio, and preloaded assets —
+none of which the skills above provide. They live in a second plugin,
+`meta-wearables-webapp-game`, which builds on this one and **requires it to be installed**.
+
+```bash
+/plugin install meta-wearables-webapp-game@meta-wearables
+```
+
+| Skill | Description |
+|-------|-------------|
+| `create-webapp-game` | Scaffold a 2D or 3D game project (Vite + TypeScript + Three.js + Vitest) |
+| `webapp-game-director` | Critique and iterate a game against a quality rubric, milestone by milestone |
+| `iterate-webapp-game` | Drive the running game in a real browser over CDP — screenshot, input, inspect state |
+| `validate-webapp-game` | Check a game against the project rules (input, localization, layering, assets) |
+| `update-webapp-game-framework` | Re-sync `src/framework/` in an existing game to the latest version |
+| `add-webapp-game-logging` | Add a log sink and a passcode-gated `/logs` portal for on-glasses debugging |
+| `read-webapp-game-docs` | Read the platform and framework documentation |
+
 ## Display Simulator Chrome Extension
 
 The **Meta Ray-Ban Display Simulator** is a Chrome extension that recreates the 600×600 display surface of Meta Ray-Ban Display glasses in your browser — additive blending, environment backgrounds, D-pad input, display tuning, and recording — so you can preview and QA your web app without the hardware.
@@ -159,7 +187,7 @@ See the `examples/` directory for sample apps:
 
 ## Multi-Tool Support
 
-Skills are authored once in `plugins/meta-wearables-webapp/skills/` and distributed via:
+Skills are authored once in `plugins/<plugin>/skills/` and distributed via:
 
 - **Claude Code** — Plugin marketplace (recommended) or `install-skills.sh claude`
 - **Codex CLI** — Plugin marketplace (recommended) or `install-skills.sh agents`

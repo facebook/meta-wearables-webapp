@@ -46,41 +46,56 @@ download_archive() {
   fi
 }
 
+# Every plugin in the marketplace. The base plugin keeps its shared documents in `references/`
+# and the game plugin in `docs/`, so the copy below takes whichever a plugin has.
+PLUGINS="meta-wearables-webapp meta-wearables-webapp-game"
+
 install_claude() {
   echo "Installing Claude Code config for Meta Wearables Web Apps..."
   download_archive
-  PLUGIN_DIR="${EXTRACT_DIR}/plugins/meta-wearables-webapp"
-  if [ -d "${PLUGIN_DIR}/skills" ]; then
+  installed=0
+  for plugin in $PLUGINS; do
+    PLUGIN_DIR="${EXTRACT_DIR}/plugins/${plugin}"
+    [ -d "${PLUGIN_DIR}/skills" ] || continue
     mkdir -p .claude/skills
     cp -R "${PLUGIN_DIR}/skills/." .claude/skills/
 
-    if [ -d "${PLUGIN_DIR}/references" ]; then
-      mkdir -p .claude/references
-      cp -R "${PLUGIN_DIR}/references/." .claude/references/
-    fi
+    for docdir in references docs; do
+      if [ -d "${PLUGIN_DIR}/${docdir}" ]; then
+        mkdir -p ".claude/${docdir}"
+        cp -R "${PLUGIN_DIR}/${docdir}/." ".claude/${docdir}/"
+      fi
+    done
+    installed=$((installed + 1))
+  done
 
-    echo "Installed .claude/ with $(find .claude -name '*.md' | wc -l | tr -d ' ') files."
-  else
+  if [ "$installed" -eq 0 ]; then
     echo "Error: Failed to download plugin content." >&2
     return 1
   fi
+  echo "Installed .claude/ with $(find .claude -name '*.md' | wc -l | tr -d ' ') files from ${installed} plugin(s)."
 }
 
 install_cursor() {
   echo "Installing Cursor plugin for Meta Wearables Web Apps..."
   download_archive
-  PLUGIN_DIR="${EXTRACT_DIR}/plugins/meta-wearables-webapp"
-  DEST="${HOME}/.cursor/plugins/local/meta-wearables-webapp"
-  if [ -d "${PLUGIN_DIR}" ]; then
+  installed=0
+  for plugin in $PLUGINS; do
+    PLUGIN_DIR="${EXTRACT_DIR}/plugins/${plugin}"
+    DEST="${HOME}/.cursor/plugins/local/${plugin}"
+    [ -d "${PLUGIN_DIR}" ] || continue
     mkdir -p "$(dirname "$DEST")"
     rm -rf "$DEST"
     cp -R "${PLUGIN_DIR}" "$DEST"
     echo "Installed Cursor plugin to $DEST"
-    echo "Restart Cursor (or run 'Developer: Reload Window') to pick up the plugin."
-  else
+    installed=$((installed + 1))
+  done
+
+  if [ "$installed" -eq 0 ]; then
     echo "Error: Failed to download plugin content." >&2
     return 1
   fi
+  echo "Restart Cursor (or run 'Developer: Reload Window') to pick up the plugin(s)."
 }
 
 install_copilot() {

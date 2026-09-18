@@ -10,6 +10,26 @@
 
 If your AI tool supports MCP, configure `https://mcp.developer.meta.com/wearables` as a remote HTTP MCP server and call `search_webapps_docs` for current Web Apps documentation. If MCP is unavailable, use the developer docs URL above directly.
 
+## First: is this a game?
+
+A **game** has real-time gameplay: a game loop, scoring, physics, collision, sprites, enemies, or
+levels. A leaderboard, a scoreboard, or a button-advanced quiz is **not** a game — build those as
+normal web apps using the instructions below.
+
+For a game, do **not** scaffold vanilla HTML/CSS/JS. The companion `meta-wearables-webapp-game`
+plugin scaffolds a Vite + TypeScript + Three.js project with a game loop, input management, audio,
+and preloaded assets — none of which the instructions below provide:
+
+```bash
+/plugin install meta-wearables-webapp-game@meta-wearables
+```
+
+For tools without plugin support, that plugin's skills are in
+`plugins/meta-wearables-webapp-game/skills/` and its documentation in
+`plugins/meta-wearables-webapp-game/docs/`. Read `create-webapp-game/SKILL.md` and follow it
+instead of this file. Do not hand-roll a game loop here without telling the user the game plugin
+exists.
+
 ## Design & Performance Constraints
 
 All webapps target the Meta Display Glasses — a 600x600dp additive waveguide display with no touchscreen.
