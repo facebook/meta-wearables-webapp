@@ -146,7 +146,11 @@ Real-time games need a game loop, a renderer, input management, audio, and prelo
 none of which the skills above provide. They live in a second plugin,
 `meta-wearables-webapp-game`, which builds on this one and **requires it to be installed**.
 
+Install both. Tools that read the Claude manifest resolve the dependency for you, but not every
+tool does — install the base plugin explicitly and the game plugin works the same everywhere:
+
 ```bash
+/plugin install meta-wearables-webapp@meta-wearables
 /plugin install meta-wearables-webapp-game@meta-wearables
 ```
 

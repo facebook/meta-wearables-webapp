@@ -1,0 +1,43 @@
+{
+  "schemaVersion": 1,
+  "name": "meta-wearables-webapp-game",
+  "version": "1.0.0",
+  "displayName": "Meta Wearables Webapp Game",
+  "description": "Skills for building Meta Display Glasses webapp games (Vite + TypeScript + Three.js)",
+  "compat": {
+    "source": "native",
+    "manifestDir": ".muse-plugin"
+  },
+  "capabilities": {
+    "skills": [
+      {
+        "id": "add-webapp-game-logging",
+        "path": "skills/add-webapp-game-logging/SKILL.md"
+      },
+      {
+        "id": "create-webapp-game",
+        "path": "skills/create-webapp-game/SKILL.md"
+      },
+      {
+        "id": "iterate-webapp-game",
+        "path": "skills/iterate-webapp-game/SKILL.md"
+      },
+      {
+        "id": "read-webapp-game-docs",
+        "path": "skills/read-webapp-game-docs/SKILL.md"
+      },
+      {
+        "id": "update-webapp-game-framework",
+        "path": "skills/update-webapp-game-framework/SKILL.md"
+      },
+      {
+        "id": "validate-webapp-game",
+        "path": "skills/validate-webapp-game/SKILL.md"
+      },
+      {
+        "id": "webapp-game-director",
+        "path": "skills/webapp-game-director/SKILL.md"
+      }
+    ]
+  }
+}
