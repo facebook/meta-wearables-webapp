@@ -8,7 +8,7 @@
       "name": "meta-wearables-webapp",
       "source": "./plugins/meta-wearables-webapp",
       "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
-      "version": "128.0.1"
+      "version": "128.0.2"
     },
     {
       "name": "meta-wearables-webapp-game",

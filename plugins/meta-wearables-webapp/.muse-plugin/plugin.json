@@ -1,0 +1,39 @@
+{
+  "schemaVersion": 1,
+  "name": "meta-wearables-webapp",
+  "version": "128.0.2",
+  "displayName": "Meta Wearables Webapp",
+  "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
+  "compat": {
+    "source": "native",
+    "manifestDir": ".muse-plugin"
+  },
+  "capabilities": {
+    "skills": [
+      {
+        "id": "ai-glasses-webapp-build",
+        "path": "skills/ai-glasses-webapp-build/SKILL.md"
+      },
+      {
+        "id": "ai-glasses-webapp-device",
+        "path": "skills/ai-glasses-webapp-device/SKILL.md"
+      },
+      {
+        "id": "ai-glasses-webapp-optimize-performance",
+        "path": "skills/ai-glasses-webapp-optimize-performance/SKILL.md"
+      },
+      {
+        "id": "ai-glasses-webapp-publish",
+        "path": "skills/ai-glasses-webapp-publish/SKILL.md"
+      },
+      {
+        "id": "ai-glasses-webapp-test",
+        "path": "skills/ai-glasses-webapp-test/SKILL.md"
+      },
+      {
+        "id": "ai-glasses-webapp-ui",
+        "path": "skills/ai-glasses-webapp-ui/SKILL.md"
+      }
+    ]
+  }
+}

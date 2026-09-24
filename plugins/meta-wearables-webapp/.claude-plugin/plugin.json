@@ -1,6 +1,6 @@
 {
   "name": "meta-wearables-webapp",
-  "version": "128.0.1",
+  "version": "128.0.2",
   "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
   "author": {
     "name": "Meta Wearables"

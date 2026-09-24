@@ -1,6 +1,6 @@
 # Meta Wearables Web App AI Toolkit
 
-An AI toolkit that helps you build Web Apps for Meta Ray-Ban Display glasses. It contains plugins for Claude Code, Codex, and Cursor.
+An AI toolkit that helps you build Web Apps for Meta Ray-Ban Display glasses. It contains plugins for Muse Code, Claude Code, Codex, and Cursor.
 
 ## What are Web Apps for Meta Ray-Ban Display glasses?
 
@@ -22,7 +22,23 @@ If your AI tool supports MCP, configure this remote HTTP server and call `search
 
 ### 1. Install AI Skills
 
-#### Option A — Plugin Marketplace (recommended for Claude Code and Codex)
+#### Option A — Plugin Marketplace (recommended for Muse Code, Claude Code, and Codex)
+
+**Muse Code:**
+
+```bash
+# Add the marketplace (one-time, run in your terminal)
+muse plugins marketplace add meta-wearables https://github.com/facebook/meta-wearables-webapp
+
+# Install the plugin
+muse plugins install meta-wearables-webapp@meta-wearables
+
+# Building a game? Also install the companion game plugin
+muse plugins install meta-wearables-webapp-game@meta-wearables
+
+# Refresh the marketplace source
+muse plugins marketplace update meta-wearables
+```
 
 **Claude Code:**
 
@@ -122,6 +138,10 @@ The `ai-glasses-webapp-publish` skill writes a `qr-publish.png` QR code after de
 | Startup budget: under 300 KB first load, fewer than 15 requests | The glasses have a slow link (1 KB ≈ 16 ms) and a slower CPU |
 | 30 Hz panel | 33 ms frame budget; no 60 fps loops |
 
+## UI Toolkit for Meta Ray-Ban Display
+
+Apps built with these skills use [UI Toolkit for Meta Ray-Ban Display](https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web), a React library of components, materials, motion, semantic design tokens, accessibility behavior, and directional focus navigation designed to work together on the glasses. The toolkit lives in its own repository; follow the instructions there for install and setup.
+
 ## Skills Included
 
 | Skill | Description |
@@ -141,6 +161,15 @@ none of which the skills above provide. They live in a second plugin,
 
 Install both. Tools that read the Claude manifest resolve the dependency for you, but not every
 tool does — install the base plugin explicitly and the game plugin works the same everywhere:
+
+Muse Code:
+
+```bash
+muse plugins install meta-wearables-webapp@meta-wearables
+muse plugins install meta-wearables-webapp-game@meta-wearables
+```
+
+Claude Code:
 
 ```bash
 /plugin install meta-wearables-webapp@meta-wearables
@@ -186,6 +215,7 @@ See the `examples/` directory for sample apps:
 
 Skills are authored once in `plugins/<plugin>/skills/` and distributed via:
 
+- **Muse Code** — Plugin marketplace (recommended) or `AGENTS.md` via `install-skills.sh agents`
 - **Claude Code** — Plugin marketplace (recommended) or `install-skills.sh claude`
 - **Codex CLI** — Plugin marketplace (recommended) or `install-skills.sh agents`
 - **Cursor** — Cursor plugin via `install-skills.sh cursor` (installs to `~/.cursor/plugins/local/`, single source of truth with Claude/Codex)
