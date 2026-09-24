@@ -79,7 +79,7 @@ export function debugAppName(appName) {
 }
 
 /**
- * `qr_generator.py` (the `/qr-code` skill) supports QR versions 1–10, i.e. roughly this many bytes
+ * `qr_generator.py` (in the `ai-glasses-webapp-publish` skill) supports QR versions 1–10, i.e. roughly this many bytes
  * in byte mode. Longer data cannot be encoded, so callers should warn before generating.
  */
 export const MAX_QR_CHARS = 271;

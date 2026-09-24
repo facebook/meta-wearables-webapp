@@ -16,8 +16,8 @@ Scaffold a new game for Meta Display Glasses: an opinionated **Vite + TypeScript
 architecture, set up for the 600x600 additive display and EMG/D-pad input. Three.js drives
 both **2D** (orthographic camera + sprites) and **3D** (perspective camera + meshes) games.
 
-This is the game-focused counterpart to `meta-wearables-webapp`'s `create-webapp` (which builds
-vanilla HTML/CSS/JS apps). Use **this** skill when the project is a real-time 2D or 3D game.
+This is the game-focused counterpart to `meta-wearables-webapp`'s `ai-glasses-webapp-build` (which
+builds React apps on UI Toolkit for Meta Ray-Ban Display). Use **this** skill when the project is a real-time 2D or 3D game.
 
 ## Required reading
 
@@ -469,11 +469,10 @@ ranks what to fix, and works those issues with a real on-glasses playtest decidi
 #### Deploying it, and reading logs off the device
 
 [`references/hosting.md`](references/hosting.md) has the Vercel recipe for this **Vite build-tool
-app** — which differs from the vanilla `meta-wearables-webapp` apps in ways that cause a total 404 if
-you get them wrong. The three that matter: **no `server.js` and no `package.json` `start`
+app**, including the mistakes that cause a total 404. The three that matter: **no `server.js` and no `package.json` `start`
 script**, **deploy from the project root** (not `dist/`), and **leave `vercel.json` where it is**.
 It also covers the cache policy (already correct — don't "fix" it with `no-store`), the `api/`
-carve-out, and which parts of `/publish-to-vercel` still apply.
+carve-out, and which parts of `meta-wearables-webapp`'s `ai-glasses-webapp-publish` still apply.
 
 Once the game is on device there is no console, so mention this when the user hits a device-only
 bug: `?log=debug&logview` draws the log on the 600x600 display with no backend at all, and the

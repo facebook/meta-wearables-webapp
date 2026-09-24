@@ -1,15 +1,15 @@
 {
   "name": "meta-wearables-webapp",
-  "version": "128.0.0",
-  "description": "Skills for building Meta Display Glasses webapps",
+  "version": "128.0.1",
+  "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
   "author": {
     "name": "Meta Wearables"
   },
   "skills": "./skills/",
   "interface": {
     "displayName": "Meta Wearables Webapp",
-    "shortDescription": "Build Meta Display Glasses webapps with D-pad UX and sensors",
-    "longDescription": "Skills for creating, testing, and publishing web applications for Meta display glasses.",
+    "shortDescription": "Web app skills for Meta Ray-Ban Display",
+    "longDescription": "Self-contained skills for building, integrating UI Toolkit, optimizing performance, validating, and publishing React applications for Meta Ray-Ban Display.",
     "developerName": "Meta Wearables",
     "category": "Coding",
     "capabilities": ["Read", "Write"]

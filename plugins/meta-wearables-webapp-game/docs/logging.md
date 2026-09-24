@@ -253,8 +253,8 @@ registers the plain URL — nothing errors, you just never get logs:
 ```
 
 By default it registers a separate `<name> (debug)` entry, so the launcher shows the normal game
-and the debug build side by side and you never re-register to toggle logging. Hand the deep link to
-the `/qr-code` skill to make a scannable PNG. That generator tops out around 271 characters, which
+and the debug build side by side and you never re-register to toggle logging. Render the deep link as a
+scannable PNG with the `qr_generator.py` in `meta-wearables-webapp`'s `ai-glasses-webapp-publish` skill. That generator tops out around 271 characters, which
 a generated 22-character token comfortably fits inside — a typical debug deep link is about 185. If
 one ever doesn't fit, shorten the app name rather than the token.
 

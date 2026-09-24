@@ -2,15 +2,16 @@
 
 Opinionated scaffolding for building **games** as webapps on Meta Display Glasses.
 
-Where `meta-wearables-webapp` generates vanilla HTML/CSS/JS apps, this plugin sets up a modern
-game project: **Vite + TypeScript + Three.js + Vitest**, a static build (no backend), and a
+Where `meta-wearables-webapp` builds React apps on UI Toolkit for Meta Ray-Ban Display, this plugin
+sets up a game project: **Vite + TypeScript + Three.js + Vitest**, a static build (no backend), and a
 renderer- and input-agnostic architecture — all within the 600x600 additive-display and
 EMG/D-pad constraints. Three.js drives both **2D** (orthographic camera + sprites) and **3D**
 (perspective camera + meshes) games.
 
 This plugin builds on `meta-wearables-webapp` (declared as a required dependency, so installing this
-one installs it too), giving you its toolset as well: `add-ui`, `connect-api`,
-`add-device-sensors`, and Vercel deployment.
+one installs it too), giving you its toolset as well: `ai-glasses-webapp-device` (sensors and glasses input),
+`ai-glasses-webapp-optimize-performance` (startup measurement), and `ai-glasses-webapp-publish`
+(production deployment and the add-to-glasses QR code).
 
 ## Skills
 
@@ -135,8 +136,7 @@ in a game scaffolded before it existed.
 
 ## Display & performance constraints
 
-The scaffold respects the shared Meta Display Glasses guidelines (owned by the base plugin and
-reachable from this plugin's `docs/`): 600x600 viewport, black page background (transparent on the additive
+The scaffold respects the Meta Display Glasses guidelines in this plugin's `docs/`: 600x600 viewport, black page background (transparent on the additive
 display), dark gray on bounded surfaces, HUD text >= 16px, 30 fps, JS < 500 KB gzipped,
 runtime memory < 128 MB. That an always-on HUD takes no fill at all — not even the dark gray
 a card may use — is this plugin's own carve-out, in
@@ -152,8 +152,10 @@ ships a root-level `vercel.json` for SPA fallback and caching: Vite's content-ha
 verbatim and so keeps stable URLs that must stay bustable — is revalidated, so a redeploy is
 picked up on the next load. **Do not** add a `server.js` /
 `package.json` `start` script — that makes Vercel run the app as a Node function and 404
-every route. Use `meta-wearables-webapp`'s `/publish-to-vercel` / `/test-on-device` only for the
-account-level steps (login, disabling Deployment Protection, aliasing).
+every route. Do not run `meta-wearables-webapp`'s `ai-glasses-webapp-publish` script on a game: it first runs the
+web app test gate, which checks for a UI Toolkit React shell a game does not have. Follow
+[`skills/create-webapp-game/references/hosting.md`](skills/create-webapp-game/references/hosting.md)
+instead, and generate the add-to-glasses QR code with that skill's `scripts/qr_generator.py`.
 
 ## Debugging on the glasses
 

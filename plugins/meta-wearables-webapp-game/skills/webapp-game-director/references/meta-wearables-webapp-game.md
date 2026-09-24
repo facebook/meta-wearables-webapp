@@ -107,11 +107,10 @@ describing the platform. When detected:
   advance it a known number of frames (`window.__webappGame.step(30)`), which is what makes "did
   that input do anything" answerable on a game that animates on its own. All of it is for
   *diagnosis*. None of it substitutes for a playtest: the desktop hides the input model, the
-  additive display, and the true perf, so get each pass in front of a player on device. Hand off
-  to the shipping skills by name:
-  **`meta-wearables-webapp:test-on-device`** (quick staging URL) or
-  **`meta-wearables-webapp:publish-to-vercel`** (stable URL — deploy from the project root, accept the
-  Vite preset, never add a `server.js`/`start` script).
+  additive display, and the true perf, so get each pass in front of a player on device. To ship a
+  pass, follow `${CLAUDE_PLUGIN_ROOT}/skills/create-webapp-game/references/hosting.md` (production
+  deploy from the project root, accept the Vite preset, never add a `server.js`/`start` script, then
+  register with the QR code from `meta-wearables-webapp`'s `ai-glasses-webapp-publish` generator).
 
 - **Critique controls against what the hardware can express.** EMG pinch = discrete select
   (`pinchTap`); D-pad swipes move focus; continuous drag is opt-in; there is no touchscreen, no

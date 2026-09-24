@@ -1,6 +1,6 @@
 # Meta Wearables Web App AI Toolkit
 
-An AI toolkit that helps you build Web Apps for Meta Ray-Ban Display glasses. It contains plugins for Claude Code, Codex, Cursor, and GitHub Copilot.
+An AI toolkit that helps you build Web Apps for Meta Ray-Ban Display glasses. It contains plugins for Claude Code, Codex, and Cursor.
 
 ## What are Web Apps for Meta Ray-Ban Display glasses?
 
@@ -64,7 +64,6 @@ git clone https://github.com/facebook/meta-wearables-webapp.git
 cd meta-wearables-webapp
 ./install-skills.sh claude    # Claude Code
 ./install-skills.sh cursor    # Cursor
-./install-skills.sh copilot   # GitHub Copilot
 ./install-skills.sh all       # All tools + AGENTS.md
 
 # Or remote install (no clone needed)
@@ -77,7 +76,7 @@ Open your project in an AI-assisted editor and describe what you want:
 
 > "Create a weather app that shows the 5-day forecast with D-pad navigation"
 
-The AI will scaffold `index.html`, `styles.css`, and `app.js` following the display glasses design system.
+The AI scaffolds a React + Vite + TypeScript app built on [UI Toolkit for Meta Ray-Ban Display](https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/) (`@wearables-ui-toolkit/mrbd` and `@wearables-ui-toolkit/icons` from npm), implements your request, runs the quality gate, and starts a local production preview at a URL like `http://127.0.0.1:4173/` for you to review.
 
 **Building a game?** Real-time gameplay — a game loop, scoring, physics, collision, sprites,
 enemies, or levels — belongs in the companion `meta-wearables-webapp-game` plugin, which scaffolds
@@ -86,7 +85,7 @@ quiz is a normal web app; build those here.
 
 ### 3. Test in Browser
 
-Start your web app locally however your project requires (e.g., open `index.html` directly, run a dev server, `npm run dev`, etc.) and open it in your desktop browser. Use arrow keys to simulate D-pad input.
+Ask the AI to test the app, or run the `ai-glasses-webapp-test` quality gate yourself. It typechecks, builds, and drives the production build in a headless browser at 600×600 and desktop sizes, checking D-pad focus, accessibility, and performance budgets. To try the app by hand, run `npm run preview` in the app directory and open the printed URL in your desktop browser. Use arrow keys to simulate D-pad input and Enter for pinch/Select.
 
 To test sensor data like geolocation or IMU sensors:
 
@@ -97,13 +96,13 @@ To test sensor data like geolocation or IMU sensors:
 
 ### 4. Deploy to Glasses
 
-Your web app must be hosted at a **publicly available HTTPS URL**. This plugin supports deploying to [Vercel](https://vercel.com), but Vercel is just one option — you can use any hosting provider as long as the result is a publicly accessible HTTPS URL.
+Your web app must be hosted at a **publicly available HTTPS URL**. The `ai-glasses-webapp-publish` skill deploys to [Vercel](https://vercel.com) production (it needs an authenticated Vercel CLI), but Vercel is just one option — you can use any hosting provider as long as the result is a publicly accessible HTTPS URL. Before release, ask the AI to run the `ai-glasses-webapp-optimize-performance` pass.
 
 Once deployed, add the web app to your glasses:
 
 **Option A — QR code (recommended):**
 
-Use the plugin's publish skill to generate a QR code. Scan it with your phone to deep link directly into the Meta AI app and add the web app to your glasses.
+The `ai-glasses-webapp-publish` skill writes a `qr-publish.png` QR code after deploying. Scan it with your phone to deep link directly into the Meta AI app and add the web app to your glasses.
 
 **Option B — Manual setup:**
 
@@ -117,28 +116,22 @@ Use the plugin's publish skill to generate a QR code. Scan it with your phone to
 
 | Constraint | Reason |
 |-----------|--------|
-| 600x600px viewport | Display size |
-| D-pad navigation only | EMG wristband translates gestures to arrow keys |
-| Dark backgrounds | Black is transparent on the additive display |
-| High contrast elements | Readability on a small transparent display |
-| `.focusable` class on interactive elements | D-pad focus management |
+| 600×600 display, responsive layout | Fill the available viewport; never hardcode device dimensions |
+| D-pad focus navigation, pinch/Enter to activate | No cursor or touchscreen; the EMG wristband drives focus and Select |
+| UI Toolkit window background and components | Black is transparent on the additive display; the Toolkit handles contrast and focus states |
+| Startup budget: under 300 KB first load, fewer than 15 requests | The glasses have a slow link (1 KB ≈ 16 ms) and a slower CPU |
+| 30 Hz panel | 33 ms frame budget; no 60 fps loops |
 
 ## Skills Included
 
 | Skill | Description |
 |-------|-------------|
-| `create-webapp` | Scaffold a new web app from scratch |
-| `add-ui` | Add or refine display-friendly UI |
-| `add-text-input` | Text fields, search boxes, and forms via the on-glasses composer |
-| `add-gestures` | EMG pinch-to-activate and opt-in continuous drag |
-| `connect-api` | Connect to REST/WebSocket APIs |
-| `add-offline` | Service Worker + Cache API offline support |
-| `add-device-sensors` | Accelerometer, gyroscope, compass, GPS, and geolocation |
-| `add-local-storage` | Add persistent browser storage |
-| `test-on-device` | Test and debug on desktop and glasses |
-| `publish-to-vercel` | Deploy to a public HTTPS URL |
-| `qr-code` | Generate add-to-glasses QR codes |
-| `passcode-for-testing` | Add a lightweight test passcode gate |
+| `ai-glasses-webapp-build` | Create, redesign, or extend an app: screens, routes, state, APIs, persistence, and offline behavior, ending with a local preview URL |
+| `ai-glasses-webapp-ui` | Scaffold new apps and install and use UI Toolkit for Meta Ray-Ban Display for all glasses UI |
+| `ai-glasses-webapp-device` | Motion, orientation, compass, step detection, geolocation, pinch/drag, D-pad game controls, and handwriting/voice text input |
+| `ai-glasses-webapp-test` | Deterministic quality gate: Toolkit checks, typecheck, build, viewport, focus, accessibility, performance smoke checks, and screenshots |
+| `ai-glasses-webapp-optimize-performance` | Measure and speed up startup over the Chrome DevTools Protocol under a glasses network/CPU profile, no device required |
+| `ai-glasses-webapp-publish` | Deploy to Vercel production, confirm public HTTPS access, and generate the add-to-glasses QR code |
 
 ## Game Skills (companion plugin)
 
@@ -196,7 +189,6 @@ Skills are authored once in `plugins/<plugin>/skills/` and distributed via:
 - **Claude Code** — Plugin marketplace (recommended) or `install-skills.sh claude`
 - **Codex CLI** — Plugin marketplace (recommended) or `install-skills.sh agents`
 - **Cursor** — Cursor plugin via `install-skills.sh cursor` (installs to `~/.cursor/plugins/local/`, single source of truth with Claude/Codex)
-- **GitHub Copilot** — `.github/copilot-instructions.md` via `install-skills.sh copilot`
 - **Gemini CLI / Windsurf / Devin** — `AGENTS.md` via `install-skills.sh agents`
 
 ## License

@@ -7,8 +7,8 @@
     {
       "name": "meta-wearables-webapp",
       "source": "./plugins/meta-wearables-webapp",
-      "description": "Skills for building Meta Display Glasses webapps",
-      "version": "128.0.0"
+      "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
+      "version": "128.0.1"
     },
     {
       "name": "meta-wearables-webapp-game",

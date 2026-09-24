@@ -202,8 +202,9 @@ see `${CLAUDE_PLUGIN_ROOT}/docs/logging.md` and the create skill). Then:
 node scripts/debug-url.mjs https://<project>.vercel.app --token=<token> --logview
 ```
 
-It prints the plain game URL and the correctly encoded `fb-viewapp://` deep link. Hand the deep
-link to the **`/qr-code`** skill to make a scannable PNG. By default it registers a separate
+It prints the plain game URL and the correctly encoded `fb-viewapp://` deep link. Render the deep
+link as a scannable PNG with the `qr_generator.py` in `meta-wearables-webapp`'s
+**`ai-glasses-webapp-publish`** skill (the command is printed by `debug-url.mjs`). By default it registers a separate
 `<name> (debug)` entry, so the glasses launcher shows the normal game and the debug build side by
 side and the user never re-registers to toggle logging.
 
@@ -327,5 +328,5 @@ Do not weaken these; each one is load-bearing.
 |-------|---------|
 | `/read-webapp-game-docs` | The `docs/logging.md` reference this skill implements |
 | `/update-webapp-game-framework` | Required first if the client half is missing |
-| `/qr-code` (`meta-wearables-webapp`) | Turns the deep link into a scannable PNG |
+| `ai-glasses-webapp-publish` (`meta-wearables-webapp`) | Its `scripts/qr_generator.py` turns the deep link into a scannable PNG |
 | `/validate-webapp-game` | Enforces that game code logs through the logger, not `console.*` |

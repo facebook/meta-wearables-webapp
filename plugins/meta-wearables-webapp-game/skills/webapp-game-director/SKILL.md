@@ -132,8 +132,8 @@ MILESTONE ─ Survey → present issue slate → user picks ─┐
 
 7. **Hand it back to playtest — and wait for the user. This is the heart of the collaboration.**
    *You cannot close an issue on your own judgment — and you literally cannot wear the glasses.*
-   Get the change to where the user can play it (for Meta Display Glasses, hand off to
-   `meta-wearables-webapp:test-on-device`), then **actively encourage them to put the glasses on** and
+   Get the change to where the user can play it (for Meta Display Glasses, deploy it and register it
+   with a QR code per `${CLAUDE_PLUGIN_ROOT}/skills/create-webapp-game/references/hosting.md`), then **actively encourage them to put the glasses on** and
    give them a short, concrete playtest brief — the brief and the principles behind it are in
    [`references/playtesting.md`](references/playtesting.md). Then **ask for their feedback**: what
    felt better, what didn't, what a fresh player actually did. Log it in the project's

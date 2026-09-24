@@ -1,0 +1,47 @@
+:root {
+  color-scheme: dark;
+  font-family: system-ui, sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  min-width: 600px;
+  min-height: 600px;
+  margin: 0;
+  background: #000;
+}
+
+body {
+  display: grid;
+  place-items: center;
+  overflow: auto;
+}
+
+#root {
+  width: 600px;
+  height: 600px;
+  min-width: 600px;
+  min-height: 600px;
+  overflow: hidden;
+  background: #000;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-shell {
+  display: grid;
+  gap: 24px;
+  align-content: center;
+  min-height: 100%;
+  padding: 24px;
+}
+
+button {
+  min-height: 88px;
+}

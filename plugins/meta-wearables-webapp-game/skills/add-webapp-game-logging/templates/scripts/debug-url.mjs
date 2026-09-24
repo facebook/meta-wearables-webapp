@@ -112,8 +112,8 @@ Game URL (open in a browser, or type into the glasses browser):
 Deep link (turn into a QR code, scan with your phone to register on the glasses):
   ${deepLink}
 
-Next: generate the QR with the /qr-code skill, e.g.
-  python3 <qr-code-skill>/scripts/qr_generator.py --png qr-debug.png --open '${deepLink}'
+Next: generate the QR with the ai-glasses-webapp-publish skill's generator, e.g.
+  python3 <ai-glasses-webapp-publish-skill>/scripts/qr_generator.py --png qr-debug.png --open '${deepLink}'
 `);
 
 if (!options.token) {

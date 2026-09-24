@@ -1,7 +1,7 @@
 {
   "name": "meta-wearables-webapp",
-  "version": "128.0.0",
-  "description": "Skills for building Meta Display Glasses webapps",
+  "version": "128.0.1",
+  "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
   "author": {
     "name": "Meta Wearables"
   },

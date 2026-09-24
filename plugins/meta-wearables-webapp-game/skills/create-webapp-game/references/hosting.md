@@ -4,8 +4,7 @@ The build needs HTTPS hosting to run on the glasses. Offer it, but don't auto-ru
 
 ## Deploying this game to Vercel
 
-This is a **Vite build-tool app**, so deploy it differently from the vanilla
-`meta-wearables-webapp` apps:
+This is a **Vite build-tool app** with its own project shape. Deploy it as follows:
 
 - **Do NOT add a `server.js` or a `package.json` `start` script.** Vercel is serverless —
   a `start` script makes it run the app as a Node function whose working directory has no
@@ -33,10 +32,17 @@ This is a **Vite build-tool app**, so deploy it differently from the vanilla
   Vite's default `assetsDir` the hashed output and the verbatim `public/assets/...` files share a
   prefix and no rule can tell them apart. `_vite/` is written by the bundler alone, which is what
   lets the immutable rule stand with no per-subdirectory carve-out.
-- Use `meta-wearables-webapp`'s **`/publish-to-vercel`** / **`/test-on-device`** only for the
-  account-level steps (`vercel login`, disabling Deployment Protection, aliasing to a stable
-  URL). **Skip their `server.js` / `start`-script hosting setup** — it does not apply to this
-  build-tool app and is what causes the 404.
+- **Do not run `meta-wearables-webapp`'s `ai-glasses-webapp-publish` script on a game.** It first
+  runs the web app test gate, which checks for a UI Toolkit React shell a game does not have.
+  Follow the same production practice by hand: check authentication with `vercel whoami` (run
+  `vercel login` if needed), deploy with `vercel --prod` from the project root, and confirm the
+  returned HTTPS URL loads without signing in. If production is behind Deployment Protection,
+  report the exact Vercel setting to the user rather than disabling it automatically.
+- **Register the game on the glasses with a QR code.** Build the deep link
+  `fb-viewapp://web_app_deep_link?appName=<url-encoded name>&appUrl=<url-encoded production URL>`
+  and render it with the `qr_generator.py` bundled in `ai-glasses-webapp-publish`:
+  `python3 <ai-glasses-webapp-publish-skill>/scripts/qr_generator.py --png qr.png '<deep link>'`.
+  Scan it with the phone to add the game in the Meta AI app.
 - Serverless functions under **`api/`** are the one sanctioned server-side addition, and the
   SPA catch-all does not shadow them. Vercel resolves the filesystem — static files, then
   Serverless Functions — *before* it consults `rewrites`, so `/api/<name>` reaches the

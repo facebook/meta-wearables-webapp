@@ -35,8 +35,8 @@ When handing a build back, give the user a short, concrete brief — not just "g
 on-device playtesting practice to encourage:
 
 - **Play on the real hardware, not the desktop preview or a screenshot.** The desktop hides the
-  additive display, EMG feel, and latency. Get the build on-device first (for Meta Display Glasses, hand off
-  to `meta-wearables-webapp:test-on-device`).
+  additive display, EMG feel, and latency. Get the build on-device first (for Meta Display Glasses, deploy and
+  register it per `create-webapp-game`'s `references/hosting.md`).
 - **Test in real conditions.** Try it in **bright light / outdoors** (the additive display washes
   out — this is where legibility lives or dies), and while **standing or moving**, not just seated
   at a desk. Rest the arm naturally so the EMG/gesture comfort is honest.
