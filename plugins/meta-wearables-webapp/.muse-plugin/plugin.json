@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "name": "meta-wearables-webapp",
-  "version": "128.0.2",
+  "version": "128.1.0",
   "displayName": "Meta Wearables Webapp",
   "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization",
   "compat": {
@@ -33,6 +33,10 @@
       {
         "id": "ai-glasses-webapp-ui",
         "path": "skills/ai-glasses-webapp-ui/SKILL.md"
+      },
+      {
+        "id": "ai-glasses-webapp-webmcp",
+        "path": "skills/ai-glasses-webapp-webmcp/SKILL.md"
       }
     ]
   }

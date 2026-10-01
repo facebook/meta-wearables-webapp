@@ -149,6 +149,7 @@ Apps built with these skills use [UI Toolkit for Meta Ray-Ban Display](https://g
 | `ai-glasses-webapp-build` | Create, redesign, or extend an app: screens, routes, state, APIs, persistence, and offline behavior, ending with a local preview URL |
 | `ai-glasses-webapp-ui` | Scaffold new apps and install and use UI Toolkit for Meta Ray-Ban Display for all glasses UI |
 | `ai-glasses-webapp-device` | Motion, orientation, compass, step detection, geolocation, pinch/drag, D-pad game controls, and handwriting/voice text input |
+| `ai-glasses-webapp-webmcp` | Register WebMCP tools on `document.modelContext` so the wearer can drive an existing app by speaking to the assistant |
 | `ai-glasses-webapp-test` | Deterministic quality gate: Toolkit checks, typecheck, build, viewport, focus, accessibility, performance smoke checks, and screenshots |
 | `ai-glasses-webapp-optimize-performance` | Measure and speed up startup over the Chrome DevTools Protocol under a glasses network/CPU profile, no device required |
 | `ai-glasses-webapp-publish` | Deploy to Vercel production, confirm public HTTPS access, and generate the add-to-glasses QR code |

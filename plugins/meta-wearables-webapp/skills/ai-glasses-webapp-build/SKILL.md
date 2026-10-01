@@ -81,7 +81,9 @@ Run timers, animation frames, sensors, polling, and sockets only while needed;
 stop them on pause, hide, route exit, and unmount. Use local assets and bundled
 icons; do not download icon packs.
 
-Use `ai-glasses-webapp-device` for sensors or glasses-specific input. Invoke
+Use `ai-glasses-webapp-device` for sensors or glasses-specific input, and
+`ai-glasses-webapp-webmcp` when the wearer should be able to drive the app by
+speaking to the assistant. Invoke
 `ai-glasses-webapp-test` after implementation and fix every failure. Before a
 release, complete the performance pass and rerun that gate. For Toolkit apps,
 the gate runs the official structure validator and requires zero findings.
