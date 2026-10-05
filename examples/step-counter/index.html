@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=600, height=600, initial-scale=1.0, user-scalable=no">
+  <meta name="description" content="Step Counter app for Meta Display Glasses. Track daily steps, distance, calories, and fitness goals using accelerometer data.">
+  <meta name="mrbd-web-app-capable" content="yes">
+  <title>Step Counter</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div id="app">
+    <!-- Home Screen: Daily Step Tracking -->
+    <div id="home" class="screen">
+      <header class="header">
+        <h1>Step Counter</h1>
+        <span class="header-meta" id="header-date">Today</span>
+      </header>
+      <div class="content">
+        <!-- Progress Ring -->
+        <div class="progress-container">
+          <div class="progress-ring-wrapper">
+            <svg class="progress-ring" viewBox="0 0 200 200">
+              <circle cx="100" cy="100" r="90" class="progress-bg"/>
+              <circle cx="100" cy="100" r="90" class="progress-fill" id="progress-fill"/>
+            </svg>
+            <div class="progress-text">
+              <div class="step-count" id="step-count">0</div>
+              <div class="step-label">steps</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Stats Grid -->
+        <div class="stats-grid">
+          <div class="stat-card">
+            <div class="stat-label">Goal</div>
+            <div class="stat-value" id="goal-display">8000</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Distance</div>
+            <div class="stat-value" id="distance-display">0.0 km</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-label">Calories</div>
+            <div class="stat-value" id="calories-display">0</div>
+          </div>
+        </div>
+
+        <!-- Goal Progress -->
+        <div class="goal-progress">
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="progress-bar"></div>
+          </div>
+          <div class="progress-label">
+            <span id="progress-percent">0%</span>
+            <span id="goal-status">0 / 8000</span>
+          </div>
+        </div>
+
+        <!-- Status Message -->
+        <div class="status-message" id="status-message">Sensors starting...</div>
+      </div>
+      <nav class="nav-bar">
+        <button class="nav-item focusable primary" data-action="start-sensors">▶ Start</button>
+        <button class="nav-item focusable" data-action="view-settings">⚙ Settings</button>
+        <button class="nav-item focusable" data-action="view-history">📊 History</button>
+      </nav>
+    </div>
+
+    <!-- Settings Screen: Configure Goal & Units -->
+    <div id="settings" class="screen hidden">
+      <header class="header">
+        <button class="back-btn focusable" data-action="back">&#8592;</button>
+        <h1>Settings</h1>
+      </header>
+      <div class="content">
+        <!-- Daily Goal Input -->
+        <div class="setting-group">
+          <label class="setting-label">Daily Goal (steps)</label>
+          <div class="input-group">
+            <button class="input-btn focusable" data-action="decrease-goal">−</button>
+            <input class="input-display" type="text" id="goal-input" readonly value="8000">
+            <button class="input-btn focusable" data-action="increase-goal">+</button>
+          </div>
+        </div>
+
+        <!-- Unit Preference -->
+        <div class="setting-group">
+          <label class="setting-label">Distance Unit</label>
+          <div class="unit-toggle">
+            <button class="unit-btn focusable active" data-action="set-unit-km">km</button>
+            <button class="unit-btn focusable" data-action="set-unit-mi">mi</button>
+          </div>
+        </div>
+
+        <!-- Reset Confirmation -->
+        <div class="setting-group">
+          <label class="setting-label">Data Management</label>
+          <button class="danger-btn focusable danger" data-action="reset-data">Clear All Data</button>
+        </div>
+
+        <!-- Info -->
+        <div class="info-box">
+          <p>📌 <strong>Sensor Data:</strong> Uses accelerometer from your glasses to detect steps.</p>
+          <p>📌 <strong>Demo Mode:</strong> Use +/− buttons to manually increment steps if sensors unavailable.</p>
+        </div>
+      </div>
+      <nav class="nav-bar">
+        <button class="nav-item focusable" data-action="back">← Back</button>
+      </nav>
+    </div>
+
+    <!-- History Screen: Last 7 Days -->
+    <div id="history" class="screen hidden">
+      <header class="header">
+        <button class="back-btn focusable" data-action="back">&#8592;</button>
+        <h1>History</h1>
+        <span class="header-meta" id="history-week">7 days</span>
+      </header>
+      <div class="content">
+        <div class="history-list" id="history-list">
+          <!-- Populated by app.js -->
+        </div>
+        <div class="no-data" id="no-history-msg" style="display: none;">
+          No data yet. Start walking to track your steps!
+        </div>
+      </div>
+      <nav class="nav-bar">
+        <button class="nav-item focusable" data-action="back">← Back</button>
+      </nav>
+    </div>
+
+    <!-- Demo Step Increment Screen (fallback for sensor testing) -->
+    <div id="demo" class="screen hidden">
+      <header class="header">
+        <button class="back-btn focusable" data-action="back">&#8592;</button>
+        <h1>Demo Mode</h1>
+      </header>
+      <div class="content">
+        <div class="demo-info">
+          <p>Sensors not available. Use the buttons below to test the app.</p>
+        </div>
+        <div class="demo-control">
+          <button class="demo-btn focusable" data-action="add-demo-steps-10">+ 10 Steps</button>
+          <button class="demo-btn focusable" data-action="add-demo-steps-50">+ 50 Steps</button>
+          <button class="demo-btn focusable" data-action="add-demo-steps-100">+ 100 Steps</button>
+        </div>
+      </div>
+      <nav class="nav-bar">
+        <button class="nav-item focusable" data-action="back">← Back</button>
+      </nav>
+    </div>
+
+    <!-- Error Overlay -->
+    <div id="error-overlay" class="overlay hidden">
+      <div class="overlay-content">
+        <div class="overlay-title">⚠ Error</div>
+        <div class="overlay-message" id="error-message">An error occurred</div>
+        <button class="nav-item focusable primary overlay-btn" data-action="dismiss-overlay">OK</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
