@@ -142,6 +142,17 @@ The `ai-glasses-webapp-publish` skill writes a `qr-publish.png` QR code after de
 
 Apps built with these skills use [UI Toolkit for Meta Ray-Ban Display](https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web), a React library of components, materials, motion, semantic design tokens, accessibility behavior, and directional focus navigation designed to work together on the glasses. The toolkit lives in its own repository; follow the instructions there for install and setup.
 
+## Agentic Interaction using WebMCP
+
+With a single tool, you can make your web app agent ready. WebMCP lets your app register tools that Meta AI can call, so the wearer can operate it by speaking to the assistant while it stays fully usable with the D-pad.
+
+> *"Hey Meta, add all the ingredients for lasagna to my cart."*
+
+To add it to an existing app, ask the AI to make the app voice-controllable. The `ai-glasses-webapp-webmcp` skill collects a few sentences the wearer would actually say, proposes a tool set for your approval, and registers the tools on `document.modelContext`.
+
+- [WebMCP agent tools documentation](https://wearables.developer.meta.com/docs/develop/webapps/agent-tools)
+- [Agentic Samples using WebMCP](https://github.com/facebook/meta_glasses_webmcp)
+
 ## Skills Included
 
 | Skill | Description |
