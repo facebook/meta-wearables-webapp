@@ -27,7 +27,7 @@ out the toolkit **outside the app directory**. The app initializer refuses to sc
 directory that already contains files.
 
 ```sh
-git clone --depth 1 https://github.com/facebook/meta-wearables-webapp.git <toolkit-dir>
+git clone --depth 1 https://github.com/meta/meta-wearables-webapp.git <toolkit-dir>
 SKILLS=<toolkit-dir>/plugins/meta-wearables-webapp/skills
 ```
 
@@ -85,7 +85,7 @@ For a Toolkit application:
 Before editing Toolkit UI, read the installed `wearables-ui-toolkit-web/SKILL.md` entrypoint, then
 load only the production pattern or direct references it selects (see
 [Read the Toolkit guidance once](#read-the-toolkit-guidance-once)). The public repository
-<https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/> contains the documentation and
+<https://github.com/meta/meta-ray-ban-display-ui-toolkit-web/> contains the documentation and
 LLM skills. Its guidance is authoritative for component choice, route geometry, typography, and
 verification. The npm acquisition and package-scope rules in [Install from npm](#install-from-npm)
 take precedence over stale setup text. An explicit custom-UI opt-out keeps the custom scaffold's own
@@ -179,7 +179,7 @@ unless the user later explicitly asks to make the app publicly accessible.
 Install and use UI Toolkit for Meta Ray-Ban Display in React web apps. Use it whenever you create or
 change glasses UI, choose Toolkit components, scaffold a new app, or migrate custom UI. The Toolkit
 is required by default unless the user explicitly opts out. The public repository
-<https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/> contains the current
+<https://github.com/meta/meta-ray-ban-display-ui-toolkit-web/> contains the current
 documentation, examples, and `llm-skills` guidance.
 
 ### Read the Toolkit guidance once

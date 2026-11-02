@@ -28,7 +28,7 @@ If your AI tool supports MCP, configure this remote HTTP server and call `search
 
 ```bash
 # Add the marketplace (one-time, run in your terminal)
-muse plugins marketplace add meta-wearables https://github.com/facebook/meta-wearables-webapp
+muse plugins marketplace add meta-wearables https://github.com/meta/meta-wearables-webapp
 
 # Install the plugin
 muse plugins install meta-wearables-webapp@meta-wearables
@@ -44,7 +44,7 @@ muse plugins marketplace update meta-wearables
 
 ```bash
 # Add the marketplace (one-time)
-/plugin marketplace add https://github.com/facebook/meta-wearables-webapp
+/plugin marketplace add https://github.com/meta/meta-wearables-webapp
 
 # Install the plugin
 /plugin install meta-wearables-webapp@meta-wearables
@@ -60,7 +60,7 @@ muse plugins marketplace update meta-wearables
 
 ```bash
 # Add the marketplace (one-time, run in your terminal)
-codex plugin marketplace add https://github.com/facebook/meta-wearables-webapp
+codex plugin marketplace add https://github.com/meta/meta-wearables-webapp
 ```
 
 Start Codex, and type `/plugins` → tab to **[Meta Wearables]** → install.
@@ -76,14 +76,14 @@ Then inside Codex: go to `/plugins` — if a newer version is available, select 
 
 ```bash
 # Clone this repo and Install for your preferred tool
-git clone https://github.com/facebook/meta-wearables-webapp.git
+git clone https://github.com/meta/meta-wearables-webapp.git
 cd meta-wearables-webapp
 ./install-skills.sh claude    # Claude Code
 ./install-skills.sh cursor    # Cursor
 ./install-skills.sh all       # All tools + AGENTS.md
 
 # Or remote install (no clone needed)
-curl -sL https://raw.githubusercontent.com/facebook/meta-wearables-webapp/main/install-skills.sh | bash
+curl -sL https://raw.githubusercontent.com/meta/meta-wearables-webapp/main/install-skills.sh | bash
 ```
 
 ### 2. Build a Web App
@@ -92,7 +92,7 @@ Open your project in an AI-assisted editor and describe what you want:
 
 > "Create a weather app that shows the 5-day forecast with D-pad navigation"
 
-The AI scaffolds a React + Vite + TypeScript app built on [UI Toolkit for Meta Ray-Ban Display](https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/) (`@wearables-ui-toolkit/mrbd` and `@wearables-ui-toolkit/icons` from npm), implements your request, runs the quality gate, and starts a local production preview at a URL like `http://127.0.0.1:4173/` for you to review.
+The AI scaffolds a React + Vite + TypeScript app built on [UI Toolkit for Meta Ray-Ban Display](https://github.com/meta/meta-ray-ban-display-ui-toolkit-web/) (`@wearables-ui-toolkit/mrbd` and `@wearables-ui-toolkit/icons` from npm), implements your request, runs the quality gate, and starts a local production preview at a URL like `http://127.0.0.1:4173/` for you to review.
 
 **Building a game?** Real-time gameplay — a game loop, scoring, physics, collision, sprites,
 enemies, or levels — belongs in the companion `meta-wearables-webapp-game` plugin, which scaffolds
@@ -140,7 +140,7 @@ The `ai-glasses-webapp-publish` skill writes a `qr-publish.png` QR code after de
 
 ## UI Toolkit for Meta Ray-Ban Display
 
-Apps built with these skills use [UI Toolkit for Meta Ray-Ban Display](https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web), a React library of components, materials, motion, semantic design tokens, accessibility behavior, and directional focus navigation designed to work together on the glasses. The toolkit lives in its own repository; follow the instructions there for install and setup.
+Apps built with these skills use [UI Toolkit for Meta Ray-Ban Display](https://github.com/meta/meta-ray-ban-display-ui-toolkit-web), a React library of components, materials, motion, semantic design tokens, accessibility behavior, and directional focus navigation designed to work together on the glasses. The toolkit lives in its own repository; follow the instructions there for install and setup.
 
 ## Agentic Interaction using WebMCP
 
@@ -151,7 +151,7 @@ With a single tool, you can make your web app agent ready. WebMCP lets your app 
 To add it to an existing app, ask the AI to make the app voice-controllable. The `ai-glasses-webapp-webmcp` skill collects a few sentences the wearer would actually say, proposes a tool set for your approval, and registers the tools on `document.modelContext`.
 
 - [WebMCP agent tools documentation](https://wearables.developer.meta.com/docs/develop/webapps/agent-tools)
-- [Agentic Samples using WebMCP](https://github.com/facebook/meta_glasses_webmcp)
+- [Agentic Samples using WebMCP](https://github.com/meta/meta_glasses_webmcp)
 
 ## Skills Included
 

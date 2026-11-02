@@ -7,7 +7,7 @@ argument-hint: "[app-directory] [new|existing]"
 # Integrate UI Toolkit for Meta Ray-Ban Display
 
 Use this skill with `ai-glasses-webapp-build`. The public Toolkit repository is
-<https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/>. It contains
+<https://github.com/meta/meta-ray-ban-display-ui-toolkit-web/>. It contains
 the current documentation, examples, and `llm-skills` guidance.
 
 ## Read the Toolkit guidance once

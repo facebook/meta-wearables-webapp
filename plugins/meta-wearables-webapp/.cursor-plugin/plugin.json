@@ -3,8 +3,8 @@
   "description": "Meta Ray-Ban Display web app skills for React, UI Toolkit, and performance optimization.",
   "version": "128.1.1",
   "author": { "name": "Meta" },
-  "homepage": "https://github.com/facebook/meta-wearables-webapp",
-  "repository": "https://github.com/facebook/meta-wearables-webapp",
+  "homepage": "https://github.com/meta/meta-wearables-webapp",
+  "repository": "https://github.com/meta/meta-wearables-webapp",
   "license": "BSD-3-Clause",
   "keywords": ["meta", "display-glasses", "wearables", "webapp", "vercel"]
 }

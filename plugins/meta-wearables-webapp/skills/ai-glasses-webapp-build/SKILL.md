@@ -31,7 +31,7 @@ branch on them. Use `var(--uit-color-background-window)` for the whole window.
 Before editing Toolkit application UI, read its
 installed `wearables-ui-toolkit-web/SKILL.md` entrypoint, then load only the
 production pattern or direct references it selects. The public repository at
-<https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/> contains the
+<https://github.com/meta/meta-ray-ban-display-ui-toolkit-web/> contains the
 documentation and LLM skills. Its UI guidance is authoritative for component
 choice, route geometry, typography, and verification; the npm acquisition and
 package-scope rules in `ai-glasses-webapp-ui` take precedence over stale setup

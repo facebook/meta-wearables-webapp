@@ -9,7 +9,7 @@ import {
 import {join, resolve} from 'node:path';
 
 export const UI_TOOLKIT_REPOSITORY =
-  'https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web/';
+  'https://github.com/meta/meta-ray-ban-display-ui-toolkit-web/';
 export const UI_TOOLKIT_PACKAGES = [
   '@wearables-ui-toolkit/mrbd',
   '@wearables-ui-toolkit/icons',
