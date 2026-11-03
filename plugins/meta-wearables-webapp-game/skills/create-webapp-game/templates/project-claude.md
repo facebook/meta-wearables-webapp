@@ -116,7 +116,7 @@ import them rather than writing your own.
 Two things outside `src/framework/` are also managed and must not be hand-edited or deleted:
 `src/framework/VERSION` and the `<meta name="generator">` tag in `src/index.html`. The tag is the
 attribution marker that reaches the built game — it records the skill and version that produced
-it, and links to <https://github.com/facebook/meta-wearables-webapp>. The framework-update skill
+it, and links to <https://github.com/meta/meta-wearables-webapp>. The framework-update skill
 re-stamps both; `npm run validate` fails if the tag goes missing.
 
 ## Three.js vs DOM

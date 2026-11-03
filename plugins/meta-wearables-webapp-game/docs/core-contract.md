@@ -57,7 +57,7 @@ Required in `src/index.html`:
 <meta name="mrbd-web-app-capable" content="yes">
 <!-- Attribution: which skill and version built this game. Written by the create skill and
      re-stamped by the framework-update skill — don't hand-edit it, and don't remove it. -->
-<meta name="generator" content="create-webapp-game <x.y.z> (https://github.com/facebook/meta-wearables-webapp)">
+<meta name="generator" content="create-webapp-game <x.y.z> (https://github.com/meta/meta-wearables-webapp)">
 ```
 
 All four are checked by `npm run validate`.

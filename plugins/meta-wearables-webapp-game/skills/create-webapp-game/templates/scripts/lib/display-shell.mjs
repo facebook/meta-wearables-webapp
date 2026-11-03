@@ -67,7 +67,9 @@ const TEMPLATE_DESCRIPTION = 'A webapp game for Meta Display Glasses.';
  * legitimately lags behind until it re-syncs its framework.
  */
 const GENERATOR_SKILL = 'create-webapp-game';
-const GENERATOR_URL = 'https://github.com/facebook/meta-wearables-webapp';
+const GENERATOR_URL = 'https://github.com/meta/meta-wearables-webapp';
+/** The URL in games stamped before the repository moved to the `meta` organization. */
+const LEGACY_GENERATOR_URL = 'https://github.com/facebook/meta-wearables-webapp';
 const GENERATOR_VERSION = /\d+\.\d+\.\d+/;
 
 const SKIP_DIRS = new Set([
@@ -165,7 +167,7 @@ export function scanHtml(text, relPath) {
     if (!GENERATOR_VERSION.test(content)) {
       violations.push({ file, line: 0, reason: '<meta name="generator"> must carry the plugin version (x.y.z) it was stamped from' });
     }
-    if (!content.includes(GENERATOR_URL)) {
+    if (!content.includes(GENERATOR_URL) && !content.includes(LEGACY_GENERATOR_URL)) {
       violations.push({ file, line: 0, reason: `<meta name="generator"> must link to ${GENERATOR_URL}` });
     }
   }

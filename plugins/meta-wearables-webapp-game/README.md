@@ -111,7 +111,7 @@ and leaves your game code (`src/models.ts`, `src/core/`, `src/hud/`, `src/config
 untouched. The framework version is the plugin version, recorded in `src/framework/VERSION` and in
 the `<meta name="generator">` tag in `src/index.html` — the attribution marker that survives into
 a built, released game, naming the skill and version that produced it and linking to
-<https://github.com/facebook/meta-wearables-webapp>. Updating re-stamps both, and inserts the tag
+<https://github.com/meta/meta-wearables-webapp>. Updating re-stamps both, and inserts the tag
 in a game scaffolded before it existed.
 
 ## The opinions (and why)

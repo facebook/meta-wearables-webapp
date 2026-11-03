@@ -47,15 +47,18 @@ const PLUGIN_JSON = path.resolve(HERE, '../../../.claude-plugin/plugin.json');
 export const GENERATOR_SKILL = 'create-webapp-game';
 
 /** Where a reader of a released game goes to learn what built it. */
-export const GENERATOR_URL = 'https://github.com/facebook/meta-wearables-webapp';
+export const GENERATOR_URL = 'https://github.com/meta/meta-wearables-webapp';
+
+/** The URL in games stamped before the repository moved to the `meta` organization. */
+export const LEGACY_GENERATOR_URL = 'https://github.com/facebook/meta-wearables-webapp';
 
 /** Matches the whole tag; `[^>]*` spans newlines, so a multi-line tag is found too. */
 const GENERATOR_TAG = /<meta\b[^>]*\bname=["']generator["'][^>]*>/i;
 const CONTENT_ATTR = /(\bcontent\s*=\s*")([^"]*)(")/i;
 
 /** The value of the generator tag's `content` attribute for a given version. */
-export function generatorContent(version) {
-  return `${GENERATOR_SKILL} ${version} (${GENERATOR_URL})`;
+export function generatorContent(version, url = GENERATOR_URL) {
+  return `${GENERATOR_SKILL} ${version} (${url})`;
 }
 
 function fail(message) {
@@ -73,18 +76,23 @@ function escapeHtmlAttribute(value) {
 
 /**
  * Rewrite the generator tag's `content`, or insert the whole tag before `</head>` when there is
- * none. Returns `{ html, generator }` where `generator` is `inserted` / `updated` / `unchanged`.
+ * none. Returns `{ html, generator, content }` where `generator` is `inserted` / `updated` /
+ * `unchanged`.
  */
 function upsertGenerator(html, version) {
-  const wanted = escapeHtmlAttribute(generatorContent(version));
   const match = html.match(GENERATOR_TAG);
+  // Keep the old URL: the game's own copy of display-shell.mjs may accept only that one, and
+  // re-stamping does not refresh it.
+  const url = match?.[0].includes(LEGACY_GENERATOR_URL) ? LEGACY_GENERATOR_URL : GENERATOR_URL;
+  const content = generatorContent(version, url);
+  const wanted = escapeHtmlAttribute(content);
 
   if (!match) {
     if (!/<\/head>/i.test(html)) {
       fail('src/index.html has no </head> — cannot insert the <meta name="generator"> tag');
     }
     const tag = `<meta name="generator" content="${wanted}" />`;
-    return { html: html.replace(/<\/head>/i, () => `  ${tag}\n  </head>`), generator: 'inserted' };
+    return { html: html.replace(/<\/head>/i, () => `  ${tag}\n  </head>`), generator: 'inserted', content };
   }
 
   const tag = match[0];
@@ -92,10 +100,11 @@ function upsertGenerator(html, version) {
     fail('the <meta name="generator"> in src/index.html has no content="..." attribute');
   }
   const updated = tag.replace(CONTENT_ATTR, (_whole, open, _old, close) => `${open}${wanted}${close}`);
-  if (updated === tag) return { html, generator: 'unchanged' };
+  if (updated === tag) return { html, generator: 'unchanged', content };
   return {
     html: `${html.slice(0, match.index)}${updated}${html.slice(match.index + tag.length)}`,
     generator: 'updated',
+    content,
   };
 }
 
@@ -110,14 +119,14 @@ export function stampVersion(projectDir, version) {
   if (!fs.existsSync(indexHtml)) fail(`no src/index.html under ${projectDir}`);
 
   const before = fs.readFileSync(indexHtml, 'utf8');
-  const { html, generator } = upsertGenerator(before, version);
+  const { html, generator, content } = upsertGenerator(before, version);
   if (html !== before) fs.writeFileSync(indexHtml, html);
 
   const versionFile = path.join(projectDir, 'src', 'framework', 'VERSION');
   fs.mkdirSync(path.dirname(versionFile), { recursive: true });
   fs.writeFileSync(versionFile, `${version}\n`);
 
-  return { version, versionFile, generator, content: generatorContent(version) };
+  return { version, versionFile, generator, content };
 }
 
 function parseArgs(argv) {
